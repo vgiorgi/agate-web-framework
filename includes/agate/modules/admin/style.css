@@ -1,0 +1,259 @@
+/* Reset | http://meyerweb.com/eric/tools/css/reset/ v2.0 | 20110126 | License: none (public domain)*/
+html, body {height:100%}
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,aside,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{border:0;color:#333;font-family:'Lucida Grande', Helvetica, Arial, Verdana, sans-serif;font-size:12px;margin:0;padding:0;vertical-align:top}
+a{border:0;margin:0;padding:0;text-decoration:none;vertical-align:baseline}
+a:hover{text-decoration:underline}
+article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}
+body{line-height:1.2}
+ol,ul{list-style:none}
+blockquote,q{quotes:none}
+blockquote:before,blockquote:after,q:before,q:after{content:none}
+table{border-collapse:collapse;border-spacing:0}
+h1{color:#333;font-size:20px;padding:4px;font-style:italic}
+h2{font-size:19px}
+h3{font-size:18px}
+h4{font-size:17px}
+input,select,textarea{font-family:'Lucida Grande', Helvetica, Arial, Verdana, sans-serif;font-size:14px}
+.half{display:inline-block;width:50%}
+.hidden{display:none}
+.error{background-color:#FCC;border-color:#F99 !important;color:300}
+.w1{width:100px !important}
+.w2{width:200px !important}
+.w3{width:300px !important}
+.w4{width:400px !important}
+a.button,a.button-blue,a.button-green,a.button-red{border:1px solid #CCC;border-radius:3px;display:inline-block;font-family:arial,sans-serif;font-size:12px;font-weight:bold;height:20px;line-height:20px;margin:5px;padding:5px;width:100px}
+a.button:hover,a.button-blue:hover,a.button-green:hover,a.button-red:hover{text-decoration:none}
+a.button{background-color:#EEE;border-color:#999;color:#666}
+a.button:hover{box-shadow:inset 0 0 2px 1px #CCC;color:#000}
+a.button-blue{background-color:#EEF;border-color:#99F;color:#66F}
+a.button-blue:hover{box-shadow:inset 0 0 2px 1px #CCF;color:#00F}
+a.button-red{background-color:#FEE;border-color:#F99;color:#F66}
+a.button-red:hover{box-shadow:inset 0 0 2px 1px #FCC;color:#F00}
+a.button-green{background-color:#EFE;border-color:#9F9;color:#6F6}
+a.button-green:hover{box-shadow:inset 0 0 2px 1px #CFC;color:#0F0}
+a.button-disable{background-color:#FFF;border-color:#999;color:#CCC}
+a.button-disable:hover{box-shadow:inset 0 0 2px 1px #FFF;color:#CCC;cursor:default}
+.ui-corner-all, .ui-corner-top, .ui-corner-left, .ui-corner-tl{border-top-left-radius:7px}
+.ui-corner-all, .ui-corner-top, .ui-corner-right, .ui-corner-tr{border-top-right-radius:7px}
+.ui-corner-all, .ui-corner-bottom, .ui-corner-left, .ui-corner-bl{border-bottom-left-radius:7px}
+.ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br{border-bottom-right-radius:7px}
+
+#website{width:100%}
+#agate-onyx-menu{background-color:#CCC;color:#333;float:left;margin:0;padding:10px 0;position:absolute;width:200px}
+#agate-onyx-menu a{background-color:#DDD;color:#339;display:block;font-size:16px;height:20px;padding:10px;margin:1px;text-decoration:none;width:178px}
+#agate-onyx-menu a.disabled{color:#999;cursor:default;font-style:italic}
+#agate-onyx-menu a.selected{background-color:#FFF}
+#agate-onyx-menu a.selected:hover{background-color:#FFF;color:#000}
+#agate-onyx-menu a.disabled:hover{background-color:#DDD}
+#agate-onyx-menu a:hover{background-color:#EEE}
+
+#agate-onyx-content{background-color:#FFF;border:1px solid #CCC;color:#222;margin:0px 10px 10px 210px;padding:10px 0;min-height:400px}
+#agate-onyx-content>.title{background-color:#999;border-left:10px solid #CCC;border-right:1px solid #CCC;height:40px;margin:0;padding:0}
+#agate-onyx-content>.title>h2{color:#FFF;float:left;font-style:italic;font-weight:normal;margin:0 1px 0 10px;padding:10px;text-shadow:0 1px 1px #333}
+#agate-onyx-content>.title>h2>span{color:#FFF;font-size:18px}
+#agate-onyx-content>.title>h2>img{margin:-10px 10px}
+#agate-onyx-content>.title>#txtSearch{background-color:#DDD;border:1px solid #CCC;border-radius:3px;display:none;float:right;font-size:17px;height:25px;margin:7px 10px 0 0;padding:0 10px;width:400px}
+
+/*
+#agate-onyx-content>.grid>.menu{border-bottom:1px solid #CCC}
+#agate-onyx-content>.grid>.table{height:270px;overflow:auto;padding:5px}
+#agate-onyx-content>.grid table{background-color:#FFF;border:1px solid #CCC;margin:0px;width:100%}
+#agate-onyx-content>.grid table tr{border-bottom:1px solid #DDD;height:25px}
+#agate-onyx-content>.grid table tr:hover{background-color:#FFC !important}
+#agate-onyx-content>.grid table tr>td{cursor:pointer;font-size:14px;padding:5px;text-align:left}
+#agate-onyx-content>.grid table tr>td.h{display:none}
+#agate-onyx-content>.grid .head{margin:0 5px}
+#agate-onyx-content>.grid .head>div{color:#666;display:inline-block;font-size:12px;font-style:italic;padding:10px 5px 0}
+#agate-onyx-content>.grid .head>.type{width:50px}
+*/
+#agate-onyx-content>.form>.menu{border-bottom:1px solid #CCC}
+
+#agate-onyx-content>.wrapper{clear:both;height:500px;overflow:auto}
+#agate-onyx-content>.wrapper>.tree{position:relative}
+#agate-onyx-content>.wrapper>.tree>.menu{border-bottom:1px solid #CCC}
+#agate-onyx-content>.wrapper>.tree>.table{padding:0px;margin:10px}
+#agate-onyx-content>.wrapper>.tree>.table>ul{border-bottom:1px solid #DDD}
+#agate-onyx-content>.wrapper>.tree>.table li{background-color:#FFF;margin:5px 0 1px 20px}
+#agate-onyx-content>.wrapper>.tree>.table li>div{background:url("/includes/agate/modules/admin/bgOnyxIcons.png") no-repeat scroll 10px -273px #FFF;border:1px solid #CCC;border-radius:3px;height:40px;position:relative}
+#agate-onyx-content>.wrapper>.tree>.table li>div.box{background-position:10px -233px}
+#agate-onyx-content>.wrapper>.tree>.table li>div.html{background-position:10px -193px}
+#agate-onyx-content>.wrapper>.tree>.table li>div.item{background-position:10px -153px}
+#agate-onyx-content>.wrapper>.tree>.table li>div.menu{background-position:10px -113px}
+#agate-onyx-content>.wrapper>.tree>.table li>div.php{background-position:10px -73px}
+#agate-onyx-content>.wrapper>.tree>.table li>div.switch{background-position:10px -33px}
+#agate-onyx-content>.wrapper>.tree>.table li>div.widget{background-position:10px 7px}
+#agate-onyx-content>.wrapper>.tree>.table li>div:hover{background-color:#EEE;box-shadow:0 1px 1px 0 #DDDDDD}
+#agate-onyx-content>.wrapper>.tree>.table li>div.box:hover{background-position:10px -553px}
+#agate-onyx-content>.wrapper>.tree>.table li>div.html:hover{background-position:10px -513px}
+#agate-onyx-content>.wrapper>.tree>.table li>div.item:hover{background-position:10px -473px}
+#agate-onyx-content>.wrapper>.tree>.table li>div.menu:hover{background-position:10px -433px}
+#agate-onyx-content>.wrapper>.tree>.table li>div.php:hover{background-position:10px -393px}
+#agate-onyx-content>.wrapper>.tree>.table li>div.switch:hover{background-position:10px -353px}
+#agate-onyx-content>.wrapper>.tree>.table li>div.widget:hover{background-position:10px -313px}
+#agate-onyx-content>.wrapper>.tree>.table li>div>span.name{font-size:16px;left:80px;position:absolute;text-transform:capitalize;top:10px}
+#agate-onyx-content>.wrapper>.tree>.table>ul>li{margin-left:0px}
+#agate-onyx-content>.wrapper>.tree>.table li>ul{border-left:1px dotted #DDD}
+#agate-onyx-content>.wrapper>.tree>.table li>div>span.button{background-color:#FFF;border:1px solid #CCC;border-radius:3px;cursor:pointer;display:block;font-size:14px;height:28px;line-height:28px;padding:0;position:absolute;text-align:center;top:5px;width:75px}
+#agate-onyx-content>.wrapper>.tree>.table li>div>span.button:hover{border-color:#666;box-shadow:inset 0 0 2px 1px #CCC;color:#000}
+#agate-onyx-content>.wrapper>.tree>.table li>div>span.new{right:180px}
+/*#agate-onyx-content>.tree>.table li>div>span.view{right:180px}*/
+#agate-onyx-content>.wrapper>.tree>.table li>div>span.edit{right:95px}
+#agate-onyx-content>.wrapper>.tree>.table li>div>span.remove{right:10px}
+
+#agate-onyx-content>.wrapper>.grid>.menu{padding:5px}
+#agate-onyx-content>.wrapper>.grid>.head{background-color:#DDD;border-top:1px solid #CCC;padding:5px 5px 5px 20px}
+#agate-onyx-content>.wrapper>.grid>.head>span{border-left:1px dotted #999;color:#666;display:inline-block;font-size:16px;padding:0 5px;text-align:left}
+#agate-onyx-content>.wrapper>.grid>.table{border-top:1px solid #CCC}
+#agate-onyx-content>.wrapper>.grid>.table>div{background-color:#FFF;border-bottom:1px solid #CCC;margin:0px;padding:0px}
+#agate-onyx-content>.wrapper>.grid>.table>div>a{border-left:10px solid #FFF;display:block;height:20px;margin:0;padding:5px 10px}
+#agate-onyx-content>.wrapper>.grid>.table>div>a:hover{background-color:#EEE;border-left:10px solid #CCC;text-decoration:none}
+#agate-onyx-content>.wrapper>.grid>.table>div>a>span{color:#666;display:inline-block;font-size:14px;padding:0 5px;text-transform:capitalize}
+#agate-onyx-content>.wrapper>.grid>.table>div>a:hover>span{color:#000}
+
+
+/*
+#agate-onyx-content>.tree>.table li{background:url("/includes/agate/modules/admin/bgOnyxIcons.png") no-repeat scroll 10px -153px #FFF;border:1px solid #DDD;color:#111;display:block;height:30px;line-height:2.2;margin-left:20px;margin-top:-1px;position:relative;text-align:left;text-decoration:none}
+#agate-onyx-content>.tree>.table li:hover{background-color:#FFC;color:#000}
+#agate-onyx-content>.tree>.table li>span{display:block;font-size:14px;position:absolute;left:80px}
+#agate-onyx-content>.tree>.table>ul>li{margin-left:0px}
+/*
+#agate-onyx-content>.tree>.table li>a>span.drag{cursor:move;display:block;float:left;height:25px;margin:1px 0 3px -70px;width:48px}
+#agate-onyx-content>.tree>.table li>a span.button{background-color:#FFF;border:1px solid #CCC;border-radius:3px;cursor:pointer;display:block;float:right;font-size:14px;line-height:1.4;margin:0 5px;padding:4px 0;text-align:center;width:75px}
+#agate-onyx-content>.tree>.table li>a span.button:hover{border-color:#666;box-shadow:inset 0 0 2px 1px #CCC;color:#000}
+#agate-onyx-content>.tree>.table li>a>form.dialog{background-color:#FFF;border:1px solid #666;box-shadow:0 0 1px 2px #999;cursor:default;padding:10px;position:absolute;right:20px;top:30px;width:400px;z-index:10}
+#agate-onyx-content>.tree>.table li>a>form.dialog>p{padding:10px}
+#agate-onyx-content>.tree>.table li>a>form.dialog>p.title{border-bottom:1px solid #999;font-size:20px;font-style:italic;margin:0 0 30px}
+#agate-onyx-content>.tree>.table li>a>form.dialog>p.actions{border-top:1px solid #CCC;padding-top:10px;text-align:right}
+#agate-onyx-content>.tree>.table li>a>form.dialog>p.actions input{height:30px;margin:10px;text-align:center;width:75px}
+#agate-onyx-content>.tree>.table li>a>form.dialog>p>label{color:#666;font-size:16px}
+#agate-onyx-content>.tree>.table li>a>form.dialog p.message{border:1px solid #FFF;padding:5px}
+*/
+#mask{background-color:rgba(0, 0, 0, 0.3);bottom:0px;height:100%;position:absolute;left:0px;right:0px;top:0px}
+#mask>form.dialog{background-color:#FFF;border:4px solid #CCC;border-radius:7px;box-shadow:0 0 2px 4px #999;cursor:default;left:10%;margin:0 auto;padding:10px;position:absolute;right:10%;top:50px}
+#mask>form.dialog>p{padding:10px}
+#mask>form.dialog>p.title{border-bottom:1px solid #999;font-size:20px;font-style:italic;margin:0 0 10px}
+#mask>form.dialog>p.actions{border-top:1px solid #CCC;padding:0;text-align:right}
+#mask>form.dialog>p.actions>input{height:30px;margin:10px;text-align:center;width:75px}
+#mask>form.delete{width:50%}
+#mask>form.edit{width:80%}
+#mask>form.new{width:66%}
+#mask>form.dialog>p{font-size:16px}
+#mask>form.dialog fieldset{border:1px solid #EEE;margin:20px 5px;padding:5px}
+#mask>form.dialog fieldset legend{color:#666;font-size:16px}
+#mask>form.dialog>fieldset>p{padding:5px}
+#mask>form.dialog label{color:#666;display:inline-block;font-size:16px;text-align:left;vertical-align:top;width:100px}
+#mask>form.dialog>p>.url{color:#33C;display:inline-block;font-size:14px;text-align:left;vertical-align:top;}
+#mask>form.dialog>p.title{line-height:2.5;padding:0 !important}
+#mask>form.dialog>p.title>input{float:right;font-size:16px;height:30px;margin:4px 0;width:75% !important}
+#mask>form.dialog>p.title>span{float:right;font-size:16px;line-height:3}
+#mask>form.dialog>fieldset a{background-color:#FFF;border:1px solid #DDD;border-radius:3px;color:#333;display:inline-block;font-size:14px;margin:3px;padding:5px 10px}
+#mask>form.dialog>fieldset a:hover{background-color:#CCC;border-color:#999;color:#000;text-decoration:none}
+#mask>form.dialog>fieldset>a{line-height:24px}
+#mask>form.dialog>fieldset>div{background-color:#EEE;border:1px solid #CCC;border-radius:3px;display:inline-block;margin:3px;}
+#mask>form.dialog>fieldset>div>span{display:inline-block;font-size:14px;line-height:24px;padding:5px 5px 5px 10px}
+#mask>form.dialog>fieldset>div#lov{display:block}
+#mask>form.dialog>fieldset>div#lov>.actions{text-align:right}
+#mask>form.dialog>fieldset>div#lov>.table li>div{background-color:#FFF;border:1px solid #CCC;border-radius:3px;margin:2px;padding:3px}
+#mask>form.dialog>fieldset>div#lov>.table li>div:hover{background-color:#DDD;cursor:pointer}
+#mask>form.dialog>fieldset>div#lov>.table li>div>span{line-height:20px}
+#mask>form.dialog>fieldset>p>input[type=text]{width:50%}
+#mask>form.dialog>p>input[type=text],
+ #mask>form.dialog>p>input[type=checkbox],
+ #mask>form.dialog>p>input[type=datetime-local],
+ #mask>form.dialog>p>textarea,
+ #mask>form.dialog>p>span.info{color:#333;margin-left:20px;vertical-align:top}
+#mask>form.dialog>p.message{display:block;padding:0;position:relative}
+#mask>form.dialog #txtPermalink{border-color:#fff #fff #666;border-style:none none solid;border-width: 0 0 1px;color:#111;margin:0 10px}
+#mask>form.dialog #txtExcerpt{width:932px}
+#flsSectionSubpages>ul>li{background-color:#ddd;border:1px solid #999;border-radius:5px;display:inline-block;margin:10px}
+#flsSectionSubpages>ul>li>span{display:inline-block;font-size:15px;font-weight:bold;margin:2px;padding:5px}
+
+
+#frmSectionEdit>.wrapperContent{background-color:#DDD;border:1px solid #CCC;border-radius:5px;padding:10px 10px 8px 10px}
+#frmSectionEdit>.wrapperContent>.frameSectionPreviewWrapper{margin:0px 2px 7px 0px}
+#frameSectionPreview{background-color:#FFF;border:1px solid #CCC;height:200px;overflow:auto;padding:1px;width:100%}
+#frmSectionEdit>.wrapperContent>.codeEditor>.half>span{background-color:#EEE;border-left:1px solid #CCC;border-right:1px solid #CCC;border-top:1px solid #CCC;border-radius:5px 5px 0 0;color:#666;display:block;font-size:14px;font-style:italic;padding:5px 10px}
+#frmSectionEdit>.wrapperContent>.codeEditor>.half>textarea{background-color:transparent;border:0px none;font-size:14px;padding:10px}
+#frmSectionEdit .CodeMirror{background-color:#FFF;border:1px solid #CCC;border-top-color:#EEE;display:block;height:155px}
+
+#frmPostEdit>.wrapperContent{background-color:#DDD;border:1px solid #CCC;border-radius:5px;padding:10px 10px 10px 10px}
+#frmPostEdit>.wrapperContent>.framePostPreviewWrapper{border:1px solid #CCC}
+#framePostPreview{background-color:#FFF;height:200px;overflow:auto;width:100%}
+#frmPostEdit>.wrapperContent>.codeEditor{border:1px solid #CCC;margin-top:5px}
+#frmPostEdit>.wrapperContent>.codeEditor>span{background-color:#EEE;color:#666;display:block;font-size:14px;font-style:italic;padding:5px 10px}
+#frmPostEdit>.wrapperContent>.codeEditor>textarea{background-color:transparent;border:0px none;font-size:14px;padding:10px}
+#frmPostEdit .CodeMirror{background-color:#FFF;display:block;height:155px}
+
+
+
+/*sections*/
+/*
+#agate-onyx-content>.grid table tr>td.t{text-align:left;width:50px}
+#agate-onyx-content>.grid table tr>td.php{color:#00C}
+#agate-onyx-content>.grid table tr>td.html{color:#0C0}
+#agate-onyx-content>.grid table tr>td.box{color:#666}
+#agate-onyx-content>.grid table tr>td.menu{color:#C0C}
+
+#agate-onyx-content>.form p{padding:10px;width:100%}
+#agate-onyx-content>.form label{display:inline-block;font-size:14px;padding:2px 10px;text-align:right;vertical-align:top;width:100px}
+#agate-onyx-content>.form input{font-size:14px;width:200px}
+#agate-onyx-content>.form input[type=checkbox]{width:auto}
+#agate-onyx-content>.form select{font-size:14px;padding: 2px;width:206px}
+*/
+/*#agate-onyx-content>.form textarea{width:400px;height:200px}*/
+
+
+/*
+#frmSectionEdit>p.tabs{height:30px;margin-top:10px;overflow:hidden}
+#frmSectionEdit>p.tabs>span{background-color:#EEE;border:1px solid #CCC;border-radius:7px 7px 0 0;cursor:pointer;display:inline-block;font-size:14px;height:27px;margin: 0 5px;padding: 0 10px;width:100px}
+#frmSectionEdit>p.tabs>span.selected{background-color:#FFF;border-bottom:1px solid #fff;color:#000}
+#frmSectionEdit>p.tabs>span:hover{background-color:#DDD;color:#333}
+#frmSectionEdit>p.tabs>span.selected:hover{background-color:#FFF;color:#333;cursor:default}
+#frmSectionEdit>p.tab{border:1px solid #CCC;margin-top:-2px;padding:10px;width:780px}
+#frameSectionPreview{border-color:#CCC;border-style:none solid solid;border-width:0 1px 1px;height:200px;overflow:auto;width:800px}
+
+
+.CodeMirror{border:1px solid #CCC;display:inline-block;height:200px;width:778px}
+.activeline{background:#eef !important}
+
+
+#codeSectionContentPreview{border:1px solid #CCC;display:inline-block;height:300px;width:800px}
+*/
+#onyxMessage{background:none repeat scroll 0 0 rgba(31, 31, 31, 0.5);position:absolute;top:0px;width:100%;z-index:666}
+#onyxMessage>div{background-color:#FFF;border:3px solid #CCC;border-radius:5px;font-size:16px;margin:5px auto;min-height:25px;padding:5px;width:33%}
+#onyxMessage>div>a{float:right;margin:0;padding:2px;text-align:center;width:50px}
+#onyxMessage .info{border-color:#00F;border-radius:5px;color:#006}
+#onyxMessage .warning{border-color:#F90;border-radius:5px;color:#630}
+#onyxMessage .error{border-color:#F00;border-radius:5px;color:#600}
+#onyxMessage .ok{border-color:#0F0;border-radius:5px;color:#060}
+
+#login{margin:100px auto;position:relative;width:600px}
+#login label{display:inline-block;font-size:13px;padding:5px;text-align:right;width:200px}
+#login form{margin:33px 0}
+#login form>p{margin:20px}
+#login input{font-size:16px;height:19px}
+#login .links{background-color:#FFF;border-top:1px solid #CCC;padding:5px;text-align:center}
+#login .links>a{margin:10px}
+#login form .button{font-size:14px;font-weight:normal;height:28px;margin-left:210px;width:100px}
+#login .lblCheckbox{text-align:left}
+#login>div>.message{position:relative;margin:0;padding:0}
+#login>div>.message>#onyxMessage{position:relative}
+#login>div>.message>#onyxMessage>div{width:80%}
+#form-login{background-color:#EEE;border:5px solid #369;border-radius:5px;box-shadow:2px 2px 2px #CCC;display:block}
+#form-login>h1{background-color:#369;color:#FFF;padding:8px}
+#form-register{background-color:#EEE;border:5px solid #396;border-radius:5px;box-shadow:2px 2px 2px #CCC;display:none}
+#form-register>h1{background-color:#396;color:#FFF;padding:8px}
+#form-recover{background-color:#EEE;border:5px solid #F63;border-radius:5px;box-shadow:2px 2px 2px #CCC;display:none}
+#form-recover>h1{background-color:#F63;color:#FFF;padding:8px}
+#txtLoginEmail,
+#pwdLoginPassword,
+#txtRegisterEmail,
+#pwdRegisterPassword,
+#pwdRegisterPasswordConfirm,
+#txtRegisterFirstName,
+#txtRegisterLastEmail,
+#txtRecoverEmail{width:250px}
+#chkPersist{margin-left:210px}
+#btnRecover{width:150px !important}
+
+

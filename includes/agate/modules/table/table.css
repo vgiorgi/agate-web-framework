@@ -1,0 +1,63 @@
+.rpt-result {
+	min-height: 300px;
+}
+
+.rpt-result table {
+	background-color: #FFFFFF;
+	border: 1px solid #999999;
+	font: normal 10px "Verdana";
+}
+
+.rpt-result th {
+	text-align: center;
+	border: 1px solid #EEEEEE
+}
+
+.rpt-result td {
+	text-align: left;
+	border: 1px solid #EEEEEE
+}
+
+.rpt-result .c {
+	text-align: center
+}
+
+.rpt-result .l {
+	text-align: left
+}
+
+.rpt-result .r {
+	text-align: right
+}
+
+.help {
+	font: normal 12px "Verdana"
+}
+
+.help h3 {
+	background-color: #ACF;
+	border-bottom: 5px solid #9AF;
+	margin: 40px 0px 5px 0px;
+	padding: 4px
+}
+
+.help table {
+	background-color: #FFFFFF;
+	border: 1px solid #999999;
+	font: normal 10px "Verdana";
+}
+
+.help th {
+	text-align: center;
+	border: 1px solid #EEEEEE
+}
+
+.help td {
+	text-align: left;
+	border: 1px solid #EEEEEE
+}
+
+.help .code {
+	background-color: #DDDDDD;
+	padding: 10px
+}

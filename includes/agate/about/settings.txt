@@ -1,0 +1,8 @@
+Settings:
+	Apache:
+	LoadModule rewrite_module modules/mod_rewrite.so
+	RewriteEngine On
+	RewriteRule ^/api.html$ /includes/agate/api.php [QSA]
+	RewriteRule ^/style.html$ /includes/agate/style.php [QSA]
+	RewriteRule ^/([a-zA-Z0-9_-]+)\.html$ /index.php?page=$1 [QSA]
+	RewriteRule ^/([a-zA-Z\-]+)/([a-zA-Z0-9_-]+)\.html$ /index.php?page=$1&id=$2 [QSA]

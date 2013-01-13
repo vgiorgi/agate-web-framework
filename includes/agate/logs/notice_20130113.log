@@ -1,0 +1,1327 @@
+>>2013/01/13 16:42:15.000000 - fe80::f078:f733:388c:abcf|| - Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.52 Safari/537.17
+Array
+(
+    [0] => sections
+    [calls] => Array
+        (
+            [0] => start - time:0.0288 ms.
+            [1] => module(admin/onyx) - time:0.2489 ms.
+            [2] => module(db/mysql) - time:0.8810 ms.
+            [3] => addStaticMethod(dbLookup) - time:0.0141 ms.
+            [4] => addStaticMethod(dbLookupRow) - time:0.0110 ms.
+            [5] => addStaticMethod(dbLookupTable) - time:0.0110 ms.
+            [6] => addStaticMethod(dbExecute) - time:0.0110 ms.
+            [7] => addStaticMethod(dbClose) - time:0.0110 ms.
+            [8] => addStaticMethod(dbChange) - time:0.0112 ms.
+            [9] => addStaticMethod(dbGetLastInsertId) - time:0.0112 ms.
+            [10] => addStaticMethod(dbAtos) - time:0.0100 ms.
+            [11] => addStaticMethod(dbFormat) - time:0.0110 ms.
+            [12] => addStaticMethod(dbLog) - time:0.0150 ms.
+            [13] => cacheLoad(pages) - time:0.1652 ms.
+            [14] => cacheLoad(sections) - time:0.1001 ms.
+            [15] => __construct - time:0.0091 ms.
+            [16] => init - time:0.5879 ms.
+            [17] => gate - time:0.0129 ms.
+            [18] => applyDefault - time:0.0460 ms.
+            [19] => getSection - time:0.0131 ms.
+            [20] => section(login) - time:0.0129 ms.
+            [21] => applyDefault - time:0.3140 ms.
+            [22] => section(form-login) - time:0.0119 ms.
+            [23] => applyDefault - time:0.2382 ms.
+            [24] => section(form-register) - time:0.0200 ms.
+            [25] => applyDefault - time:0.3412 ms.
+            [26] => section(form-recover) - time:0.0119 ms.
+            [27] => applyDefault - time:0.2851 ms.
+            [28] => end
+        )
+
+    [time] => Array
+        (
+            [start] => 1358088135.9136
+            [current] => 1358088135.9173
+            [total] => 0.0036 ms
+        )
+
+    [modules] => Array
+        (
+            [0] => admin/onyx
+            [1] => db/mysql
+        )
+
+    [session] => Array
+        (
+            [agate] => Array
+                (
+                    [user] => Array
+                        (
+                            [name] => guest
+                            [keys] => Array
+                                (
+                                )
+
+                        )
+
+                    [loginredirect] => admin
+                )
+
+            [A_TMP_PAGE_STYLE_SCREEN] => Array
+                (
+                    [0] => Array
+                        (
+                            [file] => D:/Projects/Workplace/GitHub/agate-web-framework/includes/agate/modules/admin/style.css
+                            [location] => relative
+                        )
+
+                )
+
+        )
+
+    [request] => Array
+        (
+            [page] => login
+        )
+
+)
+
+----------
+
+>>2013/01/13 16:42:45.000000 - fe80::f078:f733:388c:abcf|| - Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.52 Safari/537.17
+Array
+(
+    [0] => sections
+    [calls] => Array
+        (
+            [0] => start - time:0.0269 ms.
+            [1] => module(admin/onyx) - time:0.2348 ms.
+            [2] => module(db/mysql) - time:0.7169 ms.
+            [3] => addStaticMethod(dbLookup) - time:0.0141 ms.
+            [4] => addStaticMethod(dbLookupRow) - time:0.0110 ms.
+            [5] => addStaticMethod(dbLookupTable) - time:0.0100 ms.
+            [6] => addStaticMethod(dbExecute) - time:0.0100 ms.
+            [7] => addStaticMethod(dbClose) - time:0.0110 ms.
+            [8] => addStaticMethod(dbChange) - time:0.0110 ms.
+            [9] => addStaticMethod(dbGetLastInsertId) - time:0.0100 ms.
+            [10] => addStaticMethod(dbAtos) - time:0.0110 ms.
+            [11] => addStaticMethod(dbFormat) - time:0.0110 ms.
+            [12] => addStaticMethod(dbLog) - time:0.0150 ms.
+            [13] => cacheLoad(pages) - time:0.1230 ms.
+            [14] => cacheLoad(sections) - time:0.1030 ms.
+            [15] => __construct - time:0.0081 ms.
+            [16] => init - time:0.5839 ms.
+            [17] => gate - time:0.0129 ms.
+            [18] => applyDefault - time:0.0401 ms.
+            [19] => getSection - time:0.0141 ms.
+            [20] => section(login) - time:0.0131 ms.
+            [21] => applyDefault - time:0.3159 ms.
+            [22] => section(form-login) - time:0.0110 ms.
+            [23] => applyDefault - time:0.1791 ms.
+            [24] => section(form-register) - time:0.0110 ms.
+            [25] => applyDefault - time:0.1822 ms.
+            [26] => section(form-recover) - time:0.0122 ms.
+            [27] => applyDefault - time:0.2568 ms.
+            [28] => end
+        )
+
+    [time] => Array
+        (
+            [start] => 1358088165.3871
+            [current] => 1358088165.3903
+            [total] => 0.0031 ms
+        )
+
+    [modules] => Array
+        (
+            [0] => admin/onyx
+            [1] => db/mysql
+        )
+
+    [session] => Array
+        (
+            [agate] => Array
+                (
+                    [user] => Array
+                        (
+                            [name] => guest
+                            [keys] => Array
+                                (
+                                )
+
+                        )
+
+                    [loginredirect] => admin
+                )
+
+            [A_TMP_PAGE_STYLE_SCREEN] => Array
+                (
+                    [0] => Array
+                        (
+                            [file] => D:/Projects/Workplace/GitHub/agate-web-framework/includes/agate/modules/admin/style.css
+                            [location] => relative
+                        )
+
+                )
+
+        )
+
+    [request] => Array
+        (
+            [page] => login
+        )
+
+)
+
+----------
+
+>>2013/01/13 16:45:29.000000 - fe80::f078:f733:388c:abcf|| - Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.52 Safari/537.17
+Array
+(
+    [0] => sections
+    [calls] => Array
+        (
+            [0] => start - time:0.0269 ms.
+            [1] => module(admin/onyx) - time:0.3469 ms.
+            [2] => module(db/mysql) - time:0.8249 ms.
+            [3] => addStaticMethod(dbLookup) - time:0.0131 ms.
+            [4] => addStaticMethod(dbLookupRow) - time:0.0110 ms.
+            [5] => addStaticMethod(dbLookupTable) - time:0.0100 ms.
+            [6] => addStaticMethod(dbExecute) - time:0.0100 ms.
+            [7] => addStaticMethod(dbClose) - time:0.0091 ms.
+            [8] => addStaticMethod(dbChange) - time:0.0100 ms.
+            [9] => addStaticMethod(dbGetLastInsertId) - time:0.0100 ms.
+            [10] => addStaticMethod(dbAtos) - time:0.0100 ms.
+            [11] => addStaticMethod(dbFormat) - time:0.0100 ms.
+            [12] => addStaticMethod(dbLog) - time:0.0141 ms.
+            [13] => cacheLoad(pages) - time:0.2131 ms.
+            [14] => cacheLoad(sections) - time:0.1452 ms.
+            [15] => __construct - time:0.0081 ms.
+            [16] => init - time:0.6890 ms.
+            [17] => gate - time:0.0110 ms.
+            [18] => applyDefault - time:0.0350 ms.
+            [19] => getBodyContent - time:0.0579 ms.
+            [20] => end
+        )
+
+    [time] => Array
+        (
+            [start] => 1358088329.7442
+            [current] => 1358088329.7468
+            [total] => 0.0026 ms
+        )
+
+    [modules] => Array
+        (
+            [0] => admin/onyx
+            [1] => db/mysql
+        )
+
+    [session] => Array
+        (
+            [agate] => Array
+                (
+                    [user] => Array
+                        (
+                            [name] => guest
+                            [keys] => Array
+                                (
+                                )
+
+                        )
+
+                    [loginredirect] => admin
+                )
+
+            [A_TMP_PAGE_STYLE_SCREEN] => Array
+                (
+                    [0] => Array
+                        (
+                            [file] => reset.css
+                            [location] => static
+                        )
+
+                    [1] => Array
+                        (
+                            [file] => D:/Projects/Workplace/GitHub/agate-web-framework\includes\gs960\gs960.css
+                            [location] => relative
+                        )
+
+                    [2] => Array
+                        (
+                            [file] => website.css
+                            [location] => static
+                        )
+
+                )
+
+        )
+
+    [request] => Array
+        (
+            [page] => page404
+        )
+
+)
+
+----------
+
+>>2013/01/13 16:45:30.000000 - fe80::f078:f733:388c:abcf|| - Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.52 Safari/537.17
+Array
+(
+    [0] => sections
+    [calls] => Array
+        (
+            [0] => start - time:0.0300 ms.
+            [1] => module(admin/onyx) - time:0.3111 ms.
+            [2] => module(db/mysql) - time:1.0998 ms.
+            [3] => addStaticMethod(dbLookup) - time:0.0219 ms.
+            [4] => addStaticMethod(dbLookupRow) - time:0.0191 ms.
+            [5] => addStaticMethod(dbLookupTable) - time:0.0188 ms.
+            [6] => addStaticMethod(dbExecute) - time:0.0169 ms.
+            [7] => addStaticMethod(dbClose) - time:0.0181 ms.
+            [8] => addStaticMethod(dbChange) - time:0.0181 ms.
+            [9] => addStaticMethod(dbGetLastInsertId) - time:0.0191 ms.
+            [10] => addStaticMethod(dbAtos) - time:0.0179 ms.
+            [11] => addStaticMethod(dbFormat) - time:0.0329 ms.
+            [12] => addStaticMethod(dbLog) - time:0.0539 ms.
+            [13] => cacheLoad(pages) - time:0.3190 ms.
+            [14] => cacheLoad(sections) - time:0.1121 ms.
+            [15] => __construct - time:0.0110 ms.
+            [16] => init - time:0.6468 ms.
+            [17] => gate - time:0.0131 ms.
+            [18] => applyDefault - time:0.0379 ms.
+            [19] => getBodyContent - time:0.0660 ms.
+            [20] => end
+        )
+
+    [time] => Array
+        (
+            [start] => 1358088330.0568
+            [current] => 1358088330.06
+            [total] => 0.0032 ms
+        )
+
+    [modules] => Array
+        (
+            [0] => admin/onyx
+            [1] => db/mysql
+        )
+
+    [session] => Array
+        (
+            [agate] => Array
+                (
+                    [user] => Array
+                        (
+                            [name] => guest
+                            [keys] => Array
+                                (
+                                )
+
+                        )
+
+                    [loginredirect] => admin
+                )
+
+            [A_TMP_PAGE_STYLE_SCREEN] => Array
+                (
+                    [0] => Array
+                        (
+                            [file] => reset.css
+                            [location] => static
+                        )
+
+                    [1] => Array
+                        (
+                            [file] => D:/Projects/Workplace/GitHub/agate-web-framework\includes\gs960\gs960.css
+                            [location] => relative
+                        )
+
+                    [2] => Array
+                        (
+                            [file] => website.css
+                            [location] => static
+                        )
+
+                )
+
+        )
+
+    [request] => Array
+        (
+            [page] => page404
+        )
+
+)
+
+----------
+
+>>2013/01/13 16:45:43.000000 - fe80::f078:f733:388c:abcf|| - Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.52 Safari/537.17
+Array
+(
+    [0] => sections
+    [calls] => Array
+        (
+            [0] => start - time:0.0269 ms.
+            [1] => module(admin/onyx) - time:0.2379 ms.
+            [2] => module(db/mysql) - time:0.7319 ms.
+            [3] => addStaticMethod(dbLookup) - time:0.0129 ms.
+            [4] => addStaticMethod(dbLookupRow) - time:0.0112 ms.
+            [5] => addStaticMethod(dbLookupTable) - time:0.0100 ms.
+            [6] => addStaticMethod(dbExecute) - time:0.0110 ms.
+            [7] => addStaticMethod(dbClose) - time:0.0100 ms.
+            [8] => addStaticMethod(dbChange) - time:0.0100 ms.
+            [9] => addStaticMethod(dbGetLastInsertId) - time:0.0110 ms.
+            [10] => addStaticMethod(dbAtos) - time:0.0100 ms.
+            [11] => addStaticMethod(dbFormat) - time:0.0100 ms.
+            [12] => addStaticMethod(dbLog) - time:0.0141 ms.
+            [13] => cacheLoad(pages) - time:0.1309 ms.
+            [14] => cacheLoad(sections) - time:0.1040 ms.
+            [15] => __construct - time:0.0081 ms.
+            [16] => init - time:0.5810 ms.
+            [17] => gate - time:0.0122 ms.
+            [18] => applyDefault - time:0.0339 ms.
+            [19] => getBodyContent - time:0.0591 ms.
+            [20] => end
+        )
+
+    [time] => Array
+        (
+            [start] => 1358088343.8544
+            [current] => 1358088343.8566
+            [total] => 0.0022 ms
+        )
+
+    [modules] => Array
+        (
+            [0] => admin/onyx
+            [1] => db/mysql
+        )
+
+    [session] => Array
+        (
+            [agate] => Array
+                (
+                    [user] => Array
+                        (
+                            [name] => guest
+                            [keys] => Array
+                                (
+                                )
+
+                        )
+
+                    [loginredirect] => admin
+                )
+
+            [A_TMP_PAGE_STYLE_SCREEN] => Array
+                (
+                    [0] => Array
+                        (
+                            [file] => reset.css
+                            [location] => static
+                        )
+
+                    [1] => Array
+                        (
+                            [file] => D:/Projects/Workplace/GitHub/agate-web-framework\includes\gs960\gs960.css
+                            [location] => relative
+                        )
+
+                    [2] => Array
+                        (
+                            [file] => website.css
+                            [location] => static
+                        )
+
+                )
+
+        )
+
+    [request] => Array
+        (
+            [page] => page404
+        )
+
+)
+
+----------
+
+>>2013/01/13 16:48:21.000000 - fe80::f078:f733:388c:abcf|| - Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.52 Safari/537.17
+Array
+(
+    [0] => sections
+    [calls] => Array
+        (
+            [0] => start - time:0.1609 ms.
+            [1] => module(admin/onyx) - time:0.3660 ms.
+            [2] => module(db/mysql) - time:0.7312 ms.
+            [3] => addStaticMethod(dbLookup) - time:0.0141 ms.
+            [4] => addStaticMethod(dbLookupRow) - time:0.0110 ms.
+            [5] => addStaticMethod(dbLookupTable) - time:0.0112 ms.
+            [6] => addStaticMethod(dbExecute) - time:0.0110 ms.
+            [7] => addStaticMethod(dbClose) - time:0.0110 ms.
+            [8] => addStaticMethod(dbChange) - time:0.0110 ms.
+            [9] => addStaticMethod(dbGetLastInsertId) - time:0.0100 ms.
+            [10] => addStaticMethod(dbAtos) - time:0.0100 ms.
+            [11] => addStaticMethod(dbFormat) - time:0.0110 ms.
+            [12] => addStaticMethod(dbLog) - time:0.0141 ms.
+            [13] => cacheLoad(pages) - time:0.1268 ms.
+            [14] => cacheLoad(sections) - time:0.1779 ms.
+            [15] => __construct - time:0.0100 ms.
+            [16] => init - time:0.7451 ms.
+            [17] => gate - time:0.0119 ms.
+            [18] => applyDefault - time:0.0391 ms.
+            [19] => getBodyContent - time:0.0670 ms.
+            [20] => end
+        )
+
+    [time] => Array
+        (
+            [start] => 1358088501.4646
+            [current] => 1358088501.4675
+            [total] => 0.0029 ms
+        )
+
+    [modules] => Array
+        (
+            [0] => admin/onyx
+            [1] => db/mysql
+        )
+
+    [session] => Array
+        (
+            [agate] => Array
+                (
+                    [user] => Array
+                        (
+                            [name] => guest
+                            [keys] => Array
+                                (
+                                )
+
+                        )
+
+                    [loginredirect] => admin
+                )
+
+            [A_TMP_PAGE_STYLE_SCREEN] => Array
+                (
+                    [0] => Array
+                        (
+                            [file] => reset.css
+                            [location] => static
+                        )
+
+                    [1] => Array
+                        (
+                            [file] => D:/Projects/Workplace/GitHub/agate-web-framework\includes\gs960\gs960.css
+                            [location] => relative
+                        )
+
+                    [2] => Array
+                        (
+                            [file] => website.css
+                            [location] => static
+                        )
+
+                )
+
+        )
+
+    [request] => Array
+        (
+            [page] => home
+        )
+
+)
+
+----------
+
+>>2013/01/13 16:48:27.000000 - fe80::f078:f733:388c:abcf|| - Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.52 Safari/537.17
+Array
+(
+    [0] => sections
+    [calls] => Array
+        (
+            [0] => start - time:0.0260 ms.
+            [1] => module(admin/onyx) - time:0.2222 ms.
+            [2] => module(db/mysql) - time:0.7391 ms.
+            [3] => addStaticMethod(dbLookup) - time:0.0129 ms.
+            [4] => addStaticMethod(dbLookupRow) - time:0.0112 ms.
+            [5] => addStaticMethod(dbLookupTable) - time:0.0100 ms.
+            [6] => addStaticMethod(dbExecute) - time:0.0100 ms.
+            [7] => addStaticMethod(dbClose) - time:0.0100 ms.
+            [8] => addStaticMethod(dbChange) - time:0.0110 ms.
+            [9] => addStaticMethod(dbGetLastInsertId) - time:0.0110 ms.
+            [10] => addStaticMethod(dbAtos) - time:0.0110 ms.
+            [11] => addStaticMethod(dbFormat) - time:0.0100 ms.
+            [12] => addStaticMethod(dbLog) - time:0.0150 ms.
+            [13] => cacheLoad(pages) - time:0.1349 ms.
+            [14] => cacheLoad(sections) - time:0.1001 ms.
+            [15] => __construct - time:0.0091 ms.
+            [16] => init - time:0.5741 ms.
+            [17] => gate - time:0.0131 ms.
+            [18] => applyDefault - time:0.0360 ms.
+            [19] => getBodyContent - time:0.0639 ms.
+            [20] => end
+        )
+
+    [time] => Array
+        (
+            [start] => 1358088507.6527
+            [current] => 1358088507.6549
+            [total] => 0.0021 ms
+        )
+
+    [modules] => Array
+        (
+            [0] => admin/onyx
+            [1] => db/mysql
+        )
+
+    [session] => Array
+        (
+            [agate] => Array
+                (
+                    [user] => Array
+                        (
+                            [name] => guest
+                            [keys] => Array
+                                (
+                                )
+
+                        )
+
+                    [loginredirect] => admin
+                )
+
+            [A_TMP_PAGE_STYLE_SCREEN] => Array
+                (
+                    [0] => Array
+                        (
+                            [file] => reset.css
+                            [location] => static
+                        )
+
+                    [1] => Array
+                        (
+                            [file] => D:/Projects/Workplace/GitHub/agate-web-framework\includes\gs960\gs960.css
+                            [location] => relative
+                        )
+
+                    [2] => Array
+                        (
+                            [file] => website.css
+                            [location] => static
+                        )
+
+                )
+
+        )
+
+    [request] => Array
+        (
+            [page] => page404
+        )
+
+)
+
+----------
+
+>>2013/01/13 16:48:45.000000 - fe80::f078:f733:388c:abcf|| - Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.52 Safari/537.17
+Array
+(
+    [0] => sections
+    [calls] => Array
+        (
+            [0] => start - time:0.0250 ms.
+            [1] => module(admin/onyx) - time:0.2339 ms.
+            [2] => module(db/mysql) - time:0.6559 ms.
+            [3] => addStaticMethod(dbLookup) - time:0.0119 ms.
+            [4] => addStaticMethod(dbLookupRow) - time:0.0100 ms.
+            [5] => addStaticMethod(dbLookupTable) - time:0.0100 ms.
+            [6] => addStaticMethod(dbExecute) - time:0.0091 ms.
+            [7] => addStaticMethod(dbClose) - time:0.0100 ms.
+            [8] => addStaticMethod(dbChange) - time:0.0100 ms.
+            [9] => addStaticMethod(dbGetLastInsertId) - time:0.0100 ms.
+            [10] => addStaticMethod(dbAtos) - time:0.0091 ms.
+            [11] => addStaticMethod(dbFormat) - time:0.0100 ms.
+            [12] => addStaticMethod(dbLog) - time:0.0129 ms.
+            [13] => cacheLoad(pages) - time:0.1090 ms.
+            [14] => cacheLoad(sections) - time:0.1130 ms.
+            [15] => __construct - time:0.0081 ms.
+            [16] => init - time:0.5460 ms.
+            [17] => gate - time:0.0110 ms.
+            [18] => applyDefault - time:0.0341 ms.
+            [19] => getBodyContent - time:0.0579 ms.
+            [20] => end
+        )
+
+    [time] => Array
+        (
+            [start] => 1358088525.3258
+            [current] => 1358088525.3278
+            [total] => 0.0020 ms
+        )
+
+    [modules] => Array
+        (
+            [0] => admin/onyx
+            [1] => db/mysql
+        )
+
+    [session] => Array
+        (
+            [agate] => Array
+                (
+                    [user] => Array
+                        (
+                            [name] => guest
+                            [keys] => Array
+                                (
+                                )
+
+                        )
+
+                    [loginredirect] => admin
+                )
+
+            [A_TMP_PAGE_STYLE_SCREEN] => Array
+                (
+                    [0] => Array
+                        (
+                            [file] => reset.css
+                            [location] => static
+                        )
+
+                    [1] => Array
+                        (
+                            [file] => D:/Projects/Workplace/GitHub/agate-web-framework\includes\gs960\gs960.css
+                            [location] => relative
+                        )
+
+                    [2] => Array
+                        (
+                            [file] => website.css
+                            [location] => static
+                        )
+
+                )
+
+        )
+
+    [request] => Array
+        (
+            [page] => page404
+        )
+
+)
+
+----------
+
+>>2013/01/13 16:48:48.000000 - fe80::f078:f733:388c:abcf|| - Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.52 Safari/537.17
+Array
+(
+    [0] => sections
+    [calls] => Array
+        (
+            [0] => start - time:0.0250 ms.
+            [1] => module(admin/onyx) - time:0.2050 ms.
+            [2] => module(db/mysql) - time:0.6752 ms.
+            [3] => addStaticMethod(dbLookup) - time:0.0119 ms.
+            [4] => addStaticMethod(dbLookupRow) - time:0.0088 ms.
+            [5] => addStaticMethod(dbLookupTable) - time:0.0110 ms.
+            [6] => addStaticMethod(dbExecute) - time:0.0100 ms.
+            [7] => addStaticMethod(dbClose) - time:0.0100 ms.
+            [8] => addStaticMethod(dbChange) - time:0.0100 ms.
+            [9] => addStaticMethod(dbGetLastInsertId) - time:0.0100 ms.
+            [10] => addStaticMethod(dbAtos) - time:0.0100 ms.
+            [11] => addStaticMethod(dbFormat) - time:0.0100 ms.
+            [12] => addStaticMethod(dbLog) - time:0.0129 ms.
+            [13] => cacheLoad(pages) - time:0.1099 ms.
+            [14] => cacheLoad(sections) - time:0.0930 ms.
+            [15] => __construct - time:0.0081 ms.
+            [16] => init - time:0.5670 ms.
+            [17] => gate - time:0.0112 ms.
+            [18] => applyDefault - time:0.0339 ms.
+            [19] => getBodyContent - time:0.0560 ms.
+            [20] => end
+        )
+
+    [time] => Array
+        (
+            [start] => 1358088528.8079
+            [current] => 1358088528.8099
+            [total] => 0.0020 ms
+        )
+
+    [modules] => Array
+        (
+            [0] => admin/onyx
+            [1] => db/mysql
+        )
+
+    [session] => Array
+        (
+            [agate] => Array
+                (
+                    [user] => Array
+                        (
+                            [name] => guest
+                            [keys] => Array
+                                (
+                                )
+
+                        )
+
+                    [loginredirect] => admin
+                )
+
+            [A_TMP_PAGE_STYLE_SCREEN] => Array
+                (
+                    [0] => Array
+                        (
+                            [file] => reset.css
+                            [location] => static
+                        )
+
+                    [1] => Array
+                        (
+                            [file] => D:/Projects/Workplace/GitHub/agate-web-framework\includes\gs960\gs960.css
+                            [location] => relative
+                        )
+
+                    [2] => Array
+                        (
+                            [file] => website.css
+                            [location] => static
+                        )
+
+                )
+
+        )
+
+    [request] => Array
+        (
+            [page] => page404
+        )
+
+)
+
+----------
+
+>>2013/01/13 16:51:51.000000 - fe80::f078:f733:388c:abcf|| - Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.52 Safari/537.17
+Array
+(
+    [0] => sections
+    [calls] => Array
+        (
+            [0] => start - time:0.0300 ms.
+            [1] => module(admin/onyx) - time:0.4570 ms.
+            [2] => module(db/mysql) - time:1.1120 ms.
+            [3] => addStaticMethod(dbLookup) - time:0.0129 ms.
+            [4] => addStaticMethod(dbLookupRow) - time:0.0100 ms.
+            [5] => addStaticMethod(dbLookupTable) - time:0.0098 ms.
+            [6] => addStaticMethod(dbExecute) - time:0.0100 ms.
+            [7] => addStaticMethod(dbClose) - time:0.0100 ms.
+            [8] => addStaticMethod(dbChange) - time:0.0100 ms.
+            [9] => addStaticMethod(dbGetLastInsertId) - time:0.0100 ms.
+            [10] => addStaticMethod(dbAtos) - time:0.0100 ms.
+            [11] => addStaticMethod(dbFormat) - time:0.0088 ms.
+            [12] => addStaticMethod(dbLog) - time:0.0141 ms.
+            [13] => cacheLoad(pages) - time:0.2630 ms.
+            [14] => cacheLoad(sections) - time:0.1519 ms.
+            [15] => __construct - time:0.0091 ms.
+            [16] => init - time:0.7119 ms.
+            [17] => gate - time:0.0119 ms.
+            [18] => applyDefault - time:0.0360 ms.
+            [19] => getBodyContent - time:0.0589 ms.
+            [20] => end
+        )
+
+    [time] => Array
+        (
+            [start] => 1358088711.6281
+            [current] => 1358088711.6312
+            [total] => 0.0031 ms
+        )
+
+    [modules] => Array
+        (
+            [0] => admin/onyx
+            [1] => db/mysql
+        )
+
+    [session] => Array
+        (
+            [agate] => Array
+                (
+                    [user] => Array
+                        (
+                            [name] => guest
+                            [keys] => Array
+                                (
+                                )
+
+                        )
+
+                    [loginredirect] => admin
+                )
+
+            [A_TMP_PAGE_STYLE_SCREEN] => Array
+                (
+                    [0] => Array
+                        (
+                            [file] => reset.css
+                            [location] => static
+                        )
+
+                    [1] => Array
+                        (
+                            [file] => D:/Projects/Workplace/GitHub/agate-web-framework\includes\gs960\gs960.css
+                            [location] => relative
+                        )
+
+                    [2] => Array
+                        (
+                            [file] => website.css
+                            [location] => static
+                        )
+
+                )
+
+        )
+
+    [request] => Array
+        (
+            [page] => index
+        )
+
+)
+
+----------
+
+>>2013/01/13 16:52:04.000000 - fe80::f078:f733:388c:abcf|| - Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.52 Safari/537.17
+Array
+(
+    [0] => sections
+    [calls] => Array
+        (
+            [0] => start - time:0.0329 ms.
+            [1] => module(admin/onyx) - time:0.3409 ms.
+            [2] => module(db/mysql) - time:0.8390 ms.
+            [3] => addStaticMethod(dbLookup) - time:0.0138 ms.
+            [4] => addStaticMethod(dbLookupRow) - time:0.0100 ms.
+            [5] => addStaticMethod(dbLookupTable) - time:0.0098 ms.
+            [6] => addStaticMethod(dbExecute) - time:0.0150 ms.
+            [7] => addStaticMethod(dbClose) - time:0.0112 ms.
+            [8] => addStaticMethod(dbChange) - time:0.0110 ms.
+            [9] => addStaticMethod(dbGetLastInsertId) - time:0.0110 ms.
+            [10] => addStaticMethod(dbAtos) - time:0.0100 ms.
+            [11] => addStaticMethod(dbFormat) - time:0.0110 ms.
+            [12] => addStaticMethod(dbLog) - time:0.0150 ms.
+            [13] => cacheLoad(pages) - time:0.1678 ms.
+            [14] => cacheLoad(sections) - time:0.1340 ms.
+            [15] => __construct - time:0.0110 ms.
+            [16] => init - time:0.6471 ms.
+            [17] => gate - time:0.0119 ms.
+            [18] => applyDefault - time:0.0410 ms.
+            [19] => getSection - time:0.0138 ms.
+            [20] => section(login) - time:0.0119 ms.
+            [21] => applyDefault - time:0.2670 ms.
+            [22] => section(form-login) - time:0.0122 ms.
+            [23] => applyDefault - time:0.1850 ms.
+            [24] => section(form-register) - time:0.0110 ms.
+            [25] => applyDefault - time:0.2182 ms.
+            [26] => section(form-recover) - time:0.0110 ms.
+            [27] => applyDefault - time:0.2711 ms.
+            [28] => end
+        )
+
+    [time] => Array
+        (
+            [start] => 1358088724.3314
+            [current] => 1358088724.3349
+            [total] => 0.0035 ms
+        )
+
+    [modules] => Array
+        (
+            [0] => admin/onyx
+            [1] => db/mysql
+        )
+
+    [session] => Array
+        (
+            [agate] => Array
+                (
+                    [user] => Array
+                        (
+                            [name] => guest
+                            [keys] => Array
+                                (
+                                )
+
+                        )
+
+                    [loginredirect] => admin
+                )
+
+            [A_TMP_PAGE_STYLE_SCREEN] => Array
+                (
+                    [0] => Array
+                        (
+                            [file] => D:/Projects/Workplace/GitHub/agate-web-framework/includes/agate/modules/admin/style.css
+                            [location] => relative
+                        )
+
+                )
+
+        )
+
+    [request] => Array
+        (
+            [page] => login
+        )
+
+)
+
+----------
+
+>>2013/01/13 16:52:18.000000 - fe80::f078:f733:388c:abcf|| - Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.52 Safari/537.17
+API call:login
+Request:Array
+(
+    [get] => login
+    [email] => vgiorgi@yahoo.com
+    [password] => 123456
+)
+
+----------
+
+>>2013/01/13 16:52:43.000000 - fe80::f078:f733:388c:abcf|| - Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.52 Safari/537.17
+response for login:
+success=; message=Email not found !
+data=Array
+(
+)
+
+----------
+
+>>2013/01/13 16:52:43.000000 - fe80::f078:f733:388c:abcf|| - Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.52 Safari/537.17
+Array
+(
+    [0] => sections
+    [calls] => Array
+        (
+            [0] => start - time:0.0269 ms.
+            [1] => module(ajax/response) - time:0.4361 ms.
+            [2] => a__construct - time:0.0391 ms.
+            [3] => log - time:0.0110 ms.
+            [4] => applyDefault - time:1.7259 ms.
+            [5] => module(db/mysql) - time:0.7710 ms.
+            [6] => addStaticMethod(dbLookup) - time:0.0131 ms.
+            [7] => addStaticMethod(dbLookupRow) - time:0.0100 ms.
+            [8] => addStaticMethod(dbLookupTable) - time:0.0110 ms.
+            [9] => addStaticMethod(dbExecute) - time:0.0100 ms.
+            [10] => addStaticMethod(dbClose) - time:0.0100 ms.
+            [11] => addStaticMethod(dbChange) - time:0.0110 ms.
+            [12] => addStaticMethod(dbGetLastInsertId) - time:0.0100 ms.
+            [13] => addStaticMethod(dbAtos) - time:0.0100 ms.
+            [14] => addStaticMethod(dbFormat) - time:0.0100 ms.
+            [15] => addStaticMethod(dbLog) - time:0.0219 ms.
+            [16] => a__construct - time:2555.5229 ms.
+            [17] => a__construct - time:0.0749 ms.
+            [18] => a__construct - time:2593.5521 ms.
+            [19] => a__construct - time:0.0310 ms.
+            [20] => a__construct - time:20436.1310 ms.
+            [21] => log - time:0.0420 ms.
+            [22] => applyDefault - time:5.9891 ms.
+            [23] => a__construct
+        )
+
+    [time] => Array
+        (
+            [start] => 1358088738.16
+            [current] => 1358088763.7543
+            [total] => 25.5943 ms.
+        )
+
+    [modules] => Array
+        (
+            [0] => ajax/response
+            [1] => db/mysql
+        )
+
+    [error] => Array
+        (
+            [0] =>  Error #2002: Unable to connect to server:dbServer<hr />MySql Server is down or connection is not properly configured. Please check the configuration of sql connection!<hr />php_network_getaddresses: getaddrinfo failed: No such host is known. 
+            [1] =>  Error #2002: Error loading character set utf8: 
+            [2] =>  Error #2002: Unable to connect to server:dbServer<hr />MySql Server is down or connection is not properly configured. Please check the configuration of sql connection!<hr />php_network_getaddresses: getaddrinfo failed: No such host is known. 
+            [3] =>  Error #2002: Error loading character set utf8: 
+            [4] =>  Error #2002: Unable to connect to server:dbServer<hr />MySql Server is down or connection is not properly configured. Please check the configuration of sql connection!<hr />php_network_getaddresses: getaddrinfo failed: No such host is known. 
+            [5] =>  Error #2002: Error loading character set utf8: 
+            [6] =>  Error #2002: Unable to connect to server:dbServer<hr />MySql Server is down or connection is not properly configured. Please check the configuration of sql connection!<hr />php_network_getaddresses: getaddrinfo failed: No such host is known. 
+            [7] =>  Error #2002: Error loading character set utf8: 
+            [8] =>  Error #2002: Unable to connect to server:dbServer<hr />MySql Server is down or connection is not properly configured. Please check the configuration of sql connection!<hr />php_network_getaddresses: getaddrinfo failed: No such host is known. 
+            [9] =>  Error #2002: Error loading character set utf8: 
+            [10] =>  Error #2002: Unable to connect to server:dbServer<hr />MySql Server is down or connection is not properly configured. Please check the configuration of sql connection!<hr />php_network_getaddresses: getaddrinfo failed: No such host is known. 
+            [11] =>  Error #2002: Error loading character set utf8: 
+            [12] =>  Error #2002: Unable to connect to server:dbServer<hr />MySql Server is down or connection is not properly configured. Please check the configuration of sql connection!<hr />php_network_getaddresses: getaddrinfo failed: No such host is known. 
+            [13] =>  Error #2002: Error loading character set utf8: 
+            [14] =>  Error #2002: Unable to connect to server:dbServer<hr />MySql Server is down or connection is not properly configured. Please check the configuration of sql connection!<hr />php_network_getaddresses: getaddrinfo failed: No such host is known. 
+            [15] =>  Error #2002: Error loading character set utf8: 
+            [16] =>  Error #2002: Unable to connect to server:dbServer<hr />MySql Server is down or connection is not properly configured. Please check the configuration of sql connection!<hr />php_network_getaddresses: getaddrinfo failed: No such host is known. 
+            [17] =>  Error #2002: Error loading character set utf8: 
+            [18] =>  Error #2002: Unable to connect to server:dbServer<hr />MySql Server is down or connection is not properly configured. Please check the configuration of sql connection!<hr />php_network_getaddresses: getaddrinfo failed: No such host is known. 
+            [19] =>  Error #2002: Error loading character set utf8: 
+        )
+
+    [info] => Array
+        (
+            [0] => Db connection open: ok!
+            [1] => SELECT `id`, `email`, `password`, `display_name` AS `name` FROM `users` WHERE `email` =  LIMIT 1;
+            [2] => Db connection open: ok!
+            [3] => Db connection open: ok!
+            [4] => Db connection open: ok!
+            [5] => Db connection open: ok!
+            [6] => Db connection open: ok!
+            [7] => Db connection open: ok!
+            [8] => Db connection open: ok!
+            [9] => Db connection open: ok!
+            [10] => Db connection open: ok!
+        )
+
+    [db] => Array
+        (
+            [0] => Array
+                (
+                    [query] => SELECT `id`, `email`, `password`, `display_name` AS `name` FROM `users` WHERE `email` =  LIMIT 1;
+                    [time] => 1356730651975.12
+                )
+
+            [1] => Array
+                (
+                    [query] => INSERT INTO `logs` ( `action`, `fk`, `ip`, `table`, `user`, `useragent`, `note`, `timestamp`)  VALUES (, , , , , , NOW())
+                    [time] => 1356730672428.36
+                )
+
+        )
+
+    [session] => Array
+        (
+            [agate] => Array
+                (
+                    [user] => Array
+                        (
+                            [name] => guest
+                            [keys] => Array
+                                (
+                                )
+
+                        )
+
+                    [loginredirect] => admin
+                )
+
+        )
+
+    [request] => Array
+        (
+            [get] => login
+            [email] => vgiorgi@yahoo.com
+            [password] => 123456
+        )
+
+)
+
+----------
+
+>>2013/01/13 16:52:43.000000 - fe80::f078:f733:388c:abcf|| - Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.52 Safari/537.17
+API call:login
+Request:Array
+(
+    [get] => login
+    [email] => vgiorgi@yahoo.com
+    [password] => 123456
+)
+
+----------
+
+>>2013/01/13 16:54:37.000000 - fe80::f078:f733:388c:abcf|| - Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.52 Safari/537.17
+Array
+(
+    [0] => sections
+    [calls] => Array
+        (
+            [0] => start - time:0.0310 ms.
+            [1] => module(admin/onyx) - time:0.3731 ms.
+            [2] => module(db/mysql) - time:0.7272 ms.
+            [3] => addStaticMethod(dbLookup) - time:0.0129 ms.
+            [4] => addStaticMethod(dbLookupRow) - time:0.0112 ms.
+            [5] => addStaticMethod(dbLookupTable) - time:0.0110 ms.
+            [6] => addStaticMethod(dbExecute) - time:0.0110 ms.
+            [7] => addStaticMethod(dbClose) - time:0.0160 ms.
+            [8] => addStaticMethod(dbChange) - time:0.0112 ms.
+            [9] => addStaticMethod(dbGetLastInsertId) - time:0.0110 ms.
+            [10] => addStaticMethod(dbAtos) - time:0.0110 ms.
+            [11] => addStaticMethod(dbFormat) - time:0.0100 ms.
+            [12] => addStaticMethod(dbLog) - time:0.0150 ms.
+            [13] => cacheLoad(pages) - time:0.2711 ms.
+            [14] => cacheLoad(sections) - time:0.1678 ms.
+            [15] => __construct - time:0.0091 ms.
+            [16] => init - time:0.7300 ms.
+            [17] => gate - time:0.0129 ms.
+            [18] => applyDefault - time:0.0391 ms.
+            [19] => getBodyContent - time:0.0701 ms.
+            [20] => end
+        )
+
+    [time] => Array
+        (
+            [start] => 1358088877.3488
+            [current] => 1358088877.3515
+            [total] => 0.0027 ms
+        )
+
+    [modules] => Array
+        (
+            [0] => admin/onyx
+            [1] => db/mysql
+        )
+
+    [session] => Array
+        (
+            [agate] => Array
+                (
+                    [user] => Array
+                        (
+                            [name] => guest
+                            [keys] => Array
+                                (
+                                )
+
+                        )
+
+                    [loginredirect] => admin
+                )
+
+            [A_TMP_PAGE_STYLE_SCREEN] => Array
+                (
+                    [0] => Array
+                        (
+                            [file] => reset.css
+                            [location] => static
+                        )
+
+                    [1] => Array
+                        (
+                            [file] => D:/Projects/Workplace/GitHub/agate-web-framework\includes\gs960\gs960.css
+                            [location] => relative
+                        )
+
+                    [2] => Array
+                        (
+                            [file] => website.css
+                            [location] => static
+                        )
+
+                )
+
+        )
+
+    [request] => Array
+        (
+            [page] => index
+        )
+
+)
+
+----------
+
+>>2013/01/13 16:54:39.000000 - fe80::f078:f733:388c:abcf|| - Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.52 Safari/537.17
+Array
+(
+    [0] => sections
+    [calls] => Array
+        (
+            [0] => start - time:0.0279 ms.
+            [1] => module(admin/onyx) - time:0.2310 ms.
+            [2] => module(db/mysql) - time:0.7150 ms.
+            [3] => addStaticMethod(dbLookup) - time:0.0141 ms.
+            [4] => addStaticMethod(dbLookupRow) - time:0.0110 ms.
+            [5] => addStaticMethod(dbLookupTable) - time:0.0110 ms.
+            [6] => addStaticMethod(dbExecute) - time:0.0110 ms.
+            [7] => addStaticMethod(dbClose) - time:0.0100 ms.
+            [8] => addStaticMethod(dbChange) - time:0.0122 ms.
+            [9] => addStaticMethod(dbGetLastInsertId) - time:0.0100 ms.
+            [10] => addStaticMethod(dbAtos) - time:0.0100 ms.
+            [11] => addStaticMethod(dbFormat) - time:0.0112 ms.
+            [12] => addStaticMethod(dbLog) - time:0.0148 ms.
+            [13] => cacheLoad(pages) - time:0.1531 ms.
+            [14] => cacheLoad(sections) - time:0.0989 ms.
+            [15] => __construct - time:0.0100 ms.
+            [16] => init - time:0.5739 ms.
+            [17] => gate - time:0.0129 ms.
+            [18] => applyDefault - time:0.0401 ms.
+            [19] => getSection - time:0.0141 ms.
+            [20] => section(login) - time:0.0122 ms.
+            [21] => applyDefault - time:0.2670 ms.
+            [22] => section(form-login) - time:0.0119 ms.
+            [23] => applyDefault - time:0.1812 ms.
+            [24] => section(form-register) - time:0.0110 ms.
+            [25] => applyDefault - time:0.1900 ms.
+            [26] => section(form-recover) - time:0.0119 ms.
+            [27] => applyDefault - time:0.2561 ms.
+            [28] => end
+        )
+
+    [time] => Array
+        (
+            [start] => 1358088879.2051
+            [current] => 1358088879.2082
+            [total] => 0.0031 ms
+        )
+
+    [modules] => Array
+        (
+            [0] => admin/onyx
+            [1] => db/mysql
+        )
+
+    [session] => Array
+        (
+            [agate] => Array
+                (
+                    [user] => Array
+                        (
+                            [name] => guest
+                            [keys] => Array
+                                (
+                                )
+
+                        )
+
+                    [loginredirect] => admin
+                )
+
+            [A_TMP_PAGE_STYLE_SCREEN] => Array
+                (
+                    [0] => Array
+                        (
+                            [file] => D:/Projects/Workplace/GitHub/agate-web-framework/includes/agate/modules/admin/style.css
+                            [location] => relative
+                        )
+
+                )
+
+        )
+
+    [request] => Array
+        (
+            [page] => login
+        )
+
+)
+
+----------
+
