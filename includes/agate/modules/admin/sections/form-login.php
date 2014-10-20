@@ -1,6 +1,7 @@
 <?php
 echo(
 	'<h1>Sign in</h1>'
+//	.'<p>Sign in using your registered account:</p>'
 	.'<form method="post" action="javascript:onyx.on.submit.login()" id="formLogin">'
 		.'<p><input type="hidden" name="get" value="login" /></p>'
 		.'<p><label for="txtLoginEmail">Email:</label><input type="email" name="email" id="txtLoginEmail" tabindex="1" required="required"/></p>'

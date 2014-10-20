@@ -31,7 +31,7 @@ class ajax
 			$this -> getSection();
 		}
 		else {
-			$this -> call($this -> sAction);
+			$this -> call();
 		}
 	}
 
@@ -65,22 +65,37 @@ class ajax
 //}
 		$this -> action();
 
-		switch(@$_GET['response']) {
-		case 'redirect':
-			a::log('response: redirect='.$this -> aData['redirect']);
-			a::redirect($this -> aData['redirect']);
-			break;
-		case 'html':
-			echo($this -> aData);
-			break;
-		case 'json':
-		default:
+		if (isset($_GET['response'])) {
+			switch($_GET['response']) {
+			case 'redirect':
+				a::log('response: redirect='.$this -> aData['redirect']);
+				a::redirect($this -> aData['redirect']);
+				break;
+			case 'html':
+				echo($this -> aData);
+				break;
+			case 'null':
+			case 'false':
+			case '0':
+				break;
+			case 'json':
+			default:
+				header('Content-type: application/json');
+				echo(json_encode(array(
+					'action' => $this -> sAction,
+					'success' => $this -> bSuccess,
+					'message' => $this -> sMessage,
+					'data' => $this -> aData)));
+				break;
+			}
+		}
+		else {
+			header('Content-type: application/json');
 			echo(json_encode(array(
 				'action' => $this -> sAction,
 				'success' => $this -> bSuccess,
 				'message' => $this -> sMessage,
 				'data' => $this -> aData)));
-			break;
 		}
 		a::log(
 			'response for '.$this -> sAction.":\n"
@@ -90,7 +105,7 @@ class ajax
 
 
 //debug{
-		a::addDebugCall('end');
+		a::addDebugCall('end response');
 		a::$arDebug['time']['current'] = microtime(true);
 		a::$arDebug['time']['total'] = sprintf('%01.4F ms.', ((float)a::$arDebug['time']['current'] - (float)a::$arDebug['time']['start']));
 		a::log(a::$arDebug);

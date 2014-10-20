@@ -1,13 +1,20 @@
 <?php
+$s = _('test');
 error_reporting(-1);
 /**
  *Agate API</b>
  *@author Vasile Giorgi
  *@license lgpl
  *@copyright 2010 (c) Vasile Giorgi
- *@version 0.12.0511
+ *@version 0.13.0903
  *
  * Calls:
+ *	d2a
+ *		rebuild agate/modules/code/a.php based on d.php
+ *
+ *	guid
+ *		output: ajax response: guid
+ *
  *	login
  *		input:
  *			email = the user email
@@ -17,9 +24,11 @@ error_reporting(-1);
  *			[err] = the page to redirect on errors, only in case: response = redirect
  *		output: ajax response: user
  *
+ *	logout
  *
- *	guid
- *		output: ajax response: guid
+ *	phpinfo
+ *
+ *	register
  *
  * session
  *		output: ajax response: session
@@ -30,6 +39,7 @@ a::module('ajax/response');
 
 class apiAjax extends ajax
 {
+	const MSG_BUILD_OKAY = '';
 	const MSG_LOGIN_INVALID_EMAIL = 'Email not found !';
 	const MSG_LOGIN_SALT_NOT_FOUND = 'Salt not found !';
 	const MSG_LOGIN_INVALID_PASSWORD = 'Wrong password!';
@@ -41,10 +51,19 @@ class apiAjax extends ajax
 	const MSG_REGISTER_OKAY = 'Registration Okay!';
 
 
-	public function call($sAction)
+/**
+ * calls handler
+ * @param string $sAction
+ */
+	public function call()
 	{
-		a::log('API call:'.$sAction."\nRequest:".print_r($_REQUEST, true));
-		switch ($sAction) {
+//debug{
+		a::log('API call:'.$this -> sAction."\nRequest:".print_r($_REQUEST, true));
+//}
+		switch ($this -> sAction) {
+		case 'd2a':
+			$this -> d2a();
+			break;
 		case 'guid':
 			$this -> bSuccess = true;
 			$this -> sMessage = 'New GUID generated!';
@@ -70,6 +89,13 @@ class apiAjax extends ajax
 	}
 
 
+/**
+ * <b style="color:blue">Login call</b>
+ * @return <i>boolean</i> true on success and false on fail
+ * @property this -> bSuccess <i>boolean</i> - login result
+ * @property this -> sMessage <i>string</i> - login message on okay or error
+
+ */
 	private function callLogin() {
 		a::module('db/mysql');
 
@@ -163,6 +189,9 @@ class apiAjax extends ajax
 			$redirect = $_SESSION['agate']['loginredirect'].'.html';
 			unset($_SESSION['agate']['loginredirect']);
 		}
+		else {
+			$redirect = '';
+		}
 //set last login date:
 		a::dbExecute(
 			"UPDATE `users` "
@@ -187,6 +216,10 @@ class apiAjax extends ajax
 	}
 
 
+/**
+ * User register function - insert an user to database
+ * On okay - call login procedure.
+**/
 	private function callRegister()
 	{
 		require_once($_SERVER['DOCUMENT_ROOT'].'/includes/agate/settings/loader.php');
@@ -258,6 +291,31 @@ class apiAjax extends ajax
 		$this -> sMessage = self::MSG_REGISTER_OKAY;
 		$this -> callLogin();
 	}
+
+
+/**
+ * Build production version of code by removing debug code
+ * The function is searching for the following pattern:
+ *		start comment:	//debug{
+ *		code			[...]
+ *		end comment:	//}
+ * The list of files search and build:
+ * 	+-------------------------------------------------+
+ * 	| Path                           | Search | Build |
+ * 	+--------------------------------|--------|-------|
+ * 	| /includes/agate/modules/core/  | d.php  | a.php |
+ * 	+-------------------------------------------------+
+**/
+	private function d2a() {
+		$sFileAgateCode = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/includes/agate/modules/core/d.php');
+		$sPattern = '#//debug\{(.|\n)*?//\}#';
+		$sReplace = '';
+		$sFileAgateCode = preg_replace($sPattern, $sReplace, $sFileAgateCode);
+		file_put_contents($_SERVER['DOCUMENT_ROOT'].'/includes/agate/modules/core/a.php', $sFileAgateCode);
+		//$this -> setData ('d', preg_replace($sPattern, $sReplace, $sFileAgateCode));
+		$this -> bSuccess = true;
+	}
+
 }
 
 $oApiResponse = new apiAjax;

@@ -15,7 +15,7 @@ session_start();
  *module::core::d = the debugging core, used in development mode
  *@author Vasile Giorgi
  *@copyright 2012 (c) Vasile Giorgi
- *@version 0.12.0511
+ *@version 0.13.0903
  */
 class a
 {
@@ -28,6 +28,7 @@ class a
 	private static $arJavaScriptsFromSections = array(); //an array with included javascript for displayed sections
 	private static $arSections = array(); //an array with displayed sections
 	private static $_arNewStatic = ""; //used to extend static methodes for the main class;
+	public static $arJsonData = array('labels' => array(), 'data' => array()); //used to port data from php to javascript
 //debug{
 	public static $arDebug = array(
 		'sections',
@@ -48,23 +49,27 @@ class a
 //	public static $subpage = '';
 
 
+//debug{
 /**
  * Add debug info about the call, this is called on each method on d core.
  * Method used only in d code.
- * @param unknown_type $sCall
+ * @param string $call
  */
-	private static function addDebugCall($sCall) {
+	public static function addDebugCall($call) {
 //set the time for last call:
 		$sLastCall = end(self::$arDebug['calls']);
-		self::$arDebug['calls'][key(self::$arDebug['calls'])] = $sLastCall.' - time:'.sprintf('%01.4f ms.', (1000*((microtime(true) - a::$arDebug['time']['current']))));
+		self::$arDebug['calls'][key(self::$arDebug['calls'])] =
+			$sLastCall.' - time:'
+			.sprintf('%01.4f ms.', (1000*((microtime(true) - a::$arDebug['time']['current']))));
 //add last call:
-		self::$arDebug['calls'][] =  $sCall;
-		a::$arDebug['time']['current'] = microtime(true);
+		self::$arDebug['calls'][] =  $call;
+		self::$arDebug['time']['current'] = microtime(true);
+		self::$arDebug['calls'] = array();
 	}
+//}
 
 
 /**
- *
  * The constructor class, call self::init() to be sure it is initialized also with static init call;
  */
 	public function __construct()
@@ -84,11 +89,21 @@ class a
 	public static function __callStatic($name, $arguments)
 	{
 //debug{
-		self::addDebugCall('a__construct');
+		if ($name === 'addDebugCall') {
+			self::addDebugCall('__callStatic: '.$arguments[0]);
+		}
+		else {
+			self::addDebugCall('__callStatic: '.$name.'('.implode(', ', $arguments).')');
+		}
 //}
 		if(isset(self::$_arNewStatic[$name])) {
 			return call_user_func_array(self::$_arNewStatic[$name], $arguments);
 		}
+//debug{
+		else {
+			self::$arDebug['error'][] = 'ERROR: undefined static method '.$name;
+		}
+//}
 	}
 
 
@@ -115,20 +130,12 @@ class a
 //debug{
 		self::addDebugCall('applyDefault');
 //}
-//		$aDefaultKeys = array_keys($aDefaultAttributes);
+
 		foreach ($aDefaultAttributes as $k => $v) {
 			if(!array_key_exists($k, $aAttributes)) {
 				$aAttributes[$k] = $v;
 			}
 		}
-/*
-		$iMax = count($aDefaultKeys);
-		for($i = 0; $i < $iMax; $i++) {
-			if(!array_key_exists($aDefaultKeys[$i], $aAttributes)) {
-				$aAttributes[$aDefaultKeys[$i]] = $aDefaultAttributes[$aDefaultKeys[$i]];
-			}
-		}
-*/
 		return($aAttributes);
 	}
 
@@ -242,7 +249,6 @@ class a
 							.DIRECTORY_SEPARATOR.'agate'
 							.DIRECTORY_SEPARATOR.'modules'
 							.DIRECTORY_SEPARATOR.'admin';
-						//self::module('admin/onyx');
 						break;
 				}
 				return;
@@ -418,6 +424,12 @@ class a
 		switch($aAttributes['type']) {
 		case 'html':
 		case 'php':
+//debug{
+			if (!file_exists($aAttributes['root'].DIRECTORY_SEPARATOR.'sections'.DIRECTORY_SEPARATOR.$sSectionName.$sExtension)) {
+				echo '<p class="label-warning">Missing file: /sections/'.$sSectionName.$sExtension.'</p>';
+				return false;
+			}
+//}
 			include(
 				$aAttributes['root']
 				.DIRECTORY_SEPARATOR.'sections'
@@ -463,23 +475,7 @@ class a
 							."LEFT JOIN `users` ON `posts`.`author` = `users`.`id` "
 						."WHERE "
 							."`posts`.`permalink` = '".$_GET['id']."' ";
-
 				echo(self::dbAtos($sql, $template));
-
-/*
-
-				$permalink = $_GET['id'];
-				$arPost = self::dbLookupRow(
-						"`title`, "
-						."`content`, "
-						."(SELECT `value` FROM `postmeta` WHERE `postmeta`.`post`= `posts`.`id` AND `key` = 'album') AS `gallery` ",
-						"`posts`", "`permalink` = '".$_GET['id']."'", MYSQLI_ASSOC);
-				echo('<h1>'.$arPost['title'].'</h1>');
-				echo('<div class="content">'.$arPost['content'].'</div>');
-				if($arPost['gallery'] !== null) {
-					echo('<div class="galleria">'.$arPost['gallery'].'</div>');
-				}
-*/
 			}
 			else {
 				//get the top 10 posts from db:
@@ -517,7 +513,6 @@ class a
 			}
 			break;
 		case 'item':
-//			echo('<pre>ITEM:'.$sSectionName.'</pre>');
 			if(isset($aAttributes['subpage']) && $aAttributes['subpage'] === true) {
 				$subpage = self::$page['name'];
 			}
@@ -606,52 +601,6 @@ class a
 //debug{
 		self::addDebugCall('getBodyContent');
 //}
-		$sReturn = '';
-/*
-		$aReturn = array();
-
-		$aSwitch = array();
-		foreach(self::$arLayout as $k => &$v) {
-			if(!isset($v['type'])) {
-				$v['type'] = 'box';
-			}
-
-			if (isset(self::$arLayout[$v['parent']]['show']) && !self::$arLayout[$v['parent']]['show']) {
-				$v['show'] = false;
-			}
-			else {
-				if ($v['parent'] !== '' && self::$arLayout[$v['parent']]['type'] === 'switch') {
-					if ($v['name'] === self::$page['name']) {
-						$v['show'] = true;
-					}
-					else {
-						$v['show'] = false;
-					}
-				}
-				else {
-					$v['show'] = true;
-				}
-			}
-
-			if($v['show'] === true) {
-//				$sReturn .= self::getSection($v['name'], $v);
-				if($v['parent'] === '') {
-					$aReturn[] = $v['name'];
-				}
-				else {
-					$aReturn[self::$arLayout[$v['parent']]['name']][] = $v['name'];
-				}
-			}
-		}
-*/
-//		$attributes = array(
-//				'itemStartTag' => '<div>',
-//				'itemEndTag' => '</div>',
-//				'groupStartTag' => '<ul>',
-//				'groupEndTag' => '</ul>',
-//				'pattern' => '<div id="%s" class="%s"><span class="name">%s</span></div>',
-//				'defaultType' => 'box',
-//				'defaultParent' => ''));
 
 		$sReturn = '';
 		$sLastParentKey = '';
@@ -660,13 +609,8 @@ class a
 
 		foreach (self::$arLayout as $k => &$v) {
 			if(self::isSectionVisible($k)) {
-				if(!isset($v['type'])) {
-					$v['type'] = 'box';
-				}
-
-				if(!isset($v['parent'])) {
-					$v['parent'] = '';
-				}
+				$v['type'] = self::is($v['type'], 'box');
+				$v['parent'] = self::is($v['parent'], '');
 
 				if($v['type'] === 'item') {
 					$v['wrapper'] = false;
@@ -682,9 +626,6 @@ class a
 					}
 				}
 
-				if($v['type'] === 'item') {
-					$v['wrapper'] = false;
-				}
 				$v['close'] = false;
 				$v['sid'] = $k;
 //debug{
@@ -702,7 +643,6 @@ class a
 			$sReturn .= '</div>';
 			$sLastParentKey = self::$arLayout[$sLastParentKey]['parent'];
 		}
-		//$sReturn .= '</div>';
 		return($sReturn);
 	}
 
@@ -734,17 +674,52 @@ class a
  *  @attribute title <i>string</i>: The page title; default value: 'website'
  *  [...]
  */
-	public function gate($aAttributes)
+	public function gate($aAttributes = array())
 	{
 //debug{
 		self::addDebugCall('gate');
 //}
 		$aAttributes = self::applyDefault($aAttributes, array(
 			'lang' => 'en-EN',
-			'metaCharset' => 'UTF-8',
-			'metaDescription' => 'website',
-			'metaRobots' => 'noodp',
-			'metaGooglebot' => 'index, follow',
+			'meta' => array(
+				//html5:
+				0 => array('charset' => 'UTF-8'),
+//				1 => array('http-equiv' => 'allow', 'content' => 'methods'),
+//				2 => array('http-equiv' => 'content-encoding', 'content' => 'gzip'),
+//				3 => array('http-equiv' => 'content-language', 'content' => 'en-US'),
+//				4 => array('http-equiv' => 'content-length', 'content' => ''),
+				5 => array('http-equiv' => 'content-type', 'content' => 'text/html'),
+//				6 => array('http-equiv' => 'date', 'content' => '20130911T140024'),
+//				7 => array('http-equiv' => 'default-style', 'content' => '/'),
+//				8 => array('http-equiv' => 'expires', 'content' => ''),
+//				9 => array('http-equiv' => 'last-modified', 'content' => ''),
+//				10 => array('http-equiv' => 'location', 'content' => ''),
+//				11 => array('http-equiv' => 'refresh', 'content' => '30'), //refresh at 30sec.
+//				12 => array('http-equiv' => 'set-cookie', 'content' => '30'),
+//				13 => array('http-equiv' => 'X-UA-Compatible', 'content' => 'IE=8;FF=3;OtherUA=4'),
+//				14 => array('http-equiv' => 'WWW-Authenticate', 'content' => ''),
+				20 => array('http-equiv' => 'X-UA-Compatible', 'content' => 'IE=edge'),
+				50 => array('name' => 'application-name', 'content' => 'website'),
+				51 => array('name' => 'author', 'content' => 'Agate-Web-Framework'),
+				52 => array('name' => 'description', 'content' => 'website'),
+				53 => array('name' => 'generator', 'content' => 'Agate-Web-Framework'),
+				54 => array('name' => 'keywords', 'content' => 'text/html'),
+				//responsive:
+				61 => array('name' => 'viewport', 'content' => 'initial-scale=1,minimum-scale=1.0,user-scalable=no,width=device-width'),
+				//width=device-width,initial-scale=1.0
+				//initial-scale=1,minimum-scale=1.0,user-scalable=no,width=device-width
+				//google:
+				70 => array('name' => 'robots', 'content' => 'noodp'),
+				71 => array('name' => 'googlebot', 'content' => 'index, follow'),
+//				72 => array('name' => 'google-site-verification', 'content' => 'ua-xxx'),
+				//not support for old IE:
+
+			),
+// depricated	'metaCharset' => 'UTF-8',
+// depricated	'metaDescription' => 'website',
+// depricated	'metaRobots' => 'noodp',
+// depricated	'metaGooglebot' => 'index, follow',
+// depricated	'metaViewport' => 'width=device-width, initial-scale=1.0',
 			'title' => 'website',
 			'style' => array(),
 			'body' => 'website',
@@ -812,19 +787,39 @@ class a
 				}
 			}
 		}
+		$aAttributes['javascript']['web'] = array_unique($aAttributes['javascript']['web']);
+		a::log($aAttributes['javascript']);
+
+//ie-8+ encoding:
+		header('Content-Type:text/html utf-8');
+// xss protection:
+		header('x-content-type-options: nosniff');
+		header('x-frame-options: SAMEORIGIN');
+		header('x-xss-protection: 1; mode=block');
+//		header('strict-transport-security: max-age=60');
+//		header('X-WebKit-CSP: default-src *; script-src http://*.securityexpert.ro');
 
 		echo('<!DOCTYPE html>');
 		echo('<html lang="'.$aAttributes['lang'].'">'."\n");
 
 		echo('<head>');
-		echo('<meta http-equiv="content-type" content="text/html; charset='.$aAttributes['metaCharset'].'"/>');
-		echo('<meta name="description" content="'.$aAttributes['metaDescription'].'"/>');
-		echo('<meta name="robots" content="'.$aAttributes['metaRobots'].'"/>');
-		echo('<meta name="googlebot" content="'.$aAttributes['metaGooglebot'].'"/>');
-		if(isset($aAttributes['metaGoogleSiteVerification'])) {
-			echo('<meta name="google-site-verification" content="'.$aAttributes['metaGoogleSiteVerification'].'" />');
+		foreach ($aAttributes['meta'] as $k => $meta) {
+			echo('<meta ');
+			foreach ($meta as $key => $val) {
+				echo ($key.'="'.$val.'" ');
+			}
+			echo ('/>');
 		}
+// depricated		echo('<meta http-equiv="content-type" content="text/html; charset='.$aAttributes['metaCharset'].'"/>');
+// depricated		echo('<meta name="viewport" content="'.$aAttributes['metaViewport'].'"/>');
+// depricated		echo('<meta name="description" content="'.$aAttributes['metaDescription'].'"/>');
+// depricated		echo('<meta name="robots" content="'.$aAttributes['metaRobots'].'"/>');
+// depricated		echo('<meta name="googlebot" content="'.$aAttributes['metaGooglebot'].'"/>');
+// depricated		if(isset($aAttributes['metaGoogleSiteVerification'])) {
+// depricated			echo('<meta name="google-site-verification" content="'.$aAttributes['metaGoogleSiteVerification'].'" />');
+// depricated		}
 		echo('<title>'.$aAttributes['title'].'</title>');
+		echo('<link rel="shortcut icon" href="/favicon.ico" />');
 
 		if(count(self::$arSections) > 0) {
 			if(isset($aAttributes['style']['screen'])) {
@@ -872,14 +867,8 @@ class a
 			self::section('agate-onyx-separator', array(
 				'type' => 'separator',
 				'wrapper' => true));
-//			echo('<div id="agate-onyx">');
-//			include($_SERVER['DOCUMENT_ROOT'].'/includes/agate/modules/admin/sections/agate-onyx.php');
-//			echo('</div>');
-//			echo('<div id="agate-onyx-separator"></div>');
 		}
 		echo($sBodyContent);
-//		echo('<div class="push"></div></div>');
-//		self::section($aAttributes['footer']);
 
 		if(isset($aAttributes['javascript']) && count($aAttributes['javascript']) > 0) {
 			if(isset($aAttributes['javascript']['web'])) {
@@ -888,12 +877,10 @@ class a
 					echo('<script type="text/javascript" src="'.$aAttributes['javascript']['web'][$i].'"></script>');
 				}
 			}
-//			if(isset($aAttributes['javascript']['google']) && isset($aAttributes['javascript']['google']['key'])) {
-//				echo('<script type="text/javascript" src="https://www.google.com/jsapi?key='.$aAttributes['javascript']['google']['key'].'"></script>');
-//			}
 		}
 
 		echo('<script type="text/javascript">');
+		echo('var agate = '.json_encode(self::$arJsonData));
 		$iMax = count(self::$arJavaScriptsFromModules);
 		if($iMax > 0) {
 //debug{
@@ -939,108 +926,39 @@ class a
 
 /**
  * Output a menu item
- * @param (string) $sPageName - page name
- * @param (string) $sLabel - the menu label
- * @param (string) $sClass - the label class, default = ''
- * @param (string) $sPageCategory - the category of the page, default = ''
- * @param (bool) $bIsDefaultMenu - is the default menu, default = FALSE
- * @param (string) $sGetVar - the $_GET member used for check, default = 'page'
+ * @param (string) $pageName - page name
+ * @param (string) $label - the menu label
+ * @param (string) $class - the label class, default = ''
+ * @param (string) $pageCategory - the category of the page, default = ''
+ * @param (bool) $isDefaultMenu - is the default menu, default = FALSE
+ * @param (string) $getVar - the $_GET member used for check, default = 'page'
  */
-	public static function pageMenuItem($sPageName, $sLabel, $sClass = '', $sPageCategory = '', $bIsDefaultMenu = false, $sGetVar='page') {
+	public static function pageMenuItem($pageName, $label, $class = '', $pageCategory = '', $isDefaultMenu = false, $getVar = 'page') {
 //debug{
 		self::addDebugCall('pageMenuItem');
 //}
 
-		if($sClass === '') {
-			$sClass .= $sPageName;
+		if($class === '') {
+			$class .= $pageName;
 		}
 		if(
-			@$_GET[$sGetVar] === $sPageName
-			|| (@$_GET[$sGetVar] === $sPageCategory && @$_GET['id'] === $sPageName)
-			|| (@$_GET[$sGetVar] === $sPageCategory && !isset($_GET['id']) && $bIsDefaultMenu === true)
+			@$_GET[$getVar] === $pageName
+			|| (@$_GET[$getVar] === $pageCategory && @$_GET['id'] === $pageName)
+			|| (@$_GET[$getVar] === $pageCategory && !isset($_GET['id']) && $isDefaultMenu === true)
 			) {
-			$sClass .= ' selected';
+			$class .= ' selected';
 		}
 
-		if($sClass !== '') {
-			$sClass = 'class="'.$sClass.'"';
+		if($class !== '') {
+			$class = 'class="'.$class.'"';
 		}
 		$sUrl = '/';
-		if($sPageCategory !== '') {
-			$sUrl .= $sPageCategory.'/';
+		if($pageCategory !== '') {
+			$sUrl .= $pageCategory.'/';
 		}
-		$sUrl .= $sPageName.'.html';
-		echo('<a href="'.$sUrl.'" '.$sClass.'>'.$sLabel.'</a>');
+		$sUrl .= $pageName.'.html';
+		echo('<a href="'.$sUrl.'" '.$class.'>'.$label.'</a>');
 	}
-
-
-/**
- * Output a 960 grid cell
- * @param (integer) $iGridSize = cell size (1 - 12|16)
- * @param (integer) $iGridPrefix = cell prefix
- * @param (integer) $iGridSuffix = cell suffix
- * @param (integer) $iGridPush = cell push
- */
-	public static function gs($iGridSize = 0, $iGridPrefix = 0, $iGridSuffix = 0, $iGridPush = 0)
-	{
-//debug{
-		self::addDebugCall('gs');
-//}
-		if($iGridSize > 0)
-		{
-			$sClass = 'grid_'.$iGridSize;
-		}
-		else{
-			$sClass = 'clear';
-		}
-		if($iGridPrefix > 0)
-		{
-			$sClass .= ' prefix_'.$iGridPrefix;
-		}
-		if($iGridSuffix > 0)
-		{
-			$sClass .= ' suffix_'.$iGridSuffix;
-		}
-		if($iGridPush > 0)
-		{
-			$sClass .= ' push_'.$iGridPush;
-		}
-		if($iGridSize === 0)
-		{
-			echo('<div class="clear"></div>');
-		}
-		else
-		{
-			echo('<div class="'.$sClass.'">');
-		}
-	}
-
-
-/**
- * Close a 960 grid cell
- */
-	public static function gs_x()
-	{
-//debug{
-		self::addDebugCall('gs_x');
-//}
-		self::$arDebug['calls'][] = 'gs_x';
-		echo('</div>');
-	}
-
-
-/**
- * Clear for 960 grid
- */
-	public static function gs_clear()
-	{
-//debug{
-		self::addDebugCall('gs_clear');
-//}
-		self::$arDebug['calls'][] = 'gs_clear';
-		self::gs();
-	}
-
 
 
 
@@ -1075,52 +993,40 @@ class a
 			}
 		}
 	}
-/*
-	public static function arrayToString($array, $attributes = array()) {
 
-		$attributes = self::applyDefault($attributes, array(
-//			'cellTag' => 'td',
-//			'rowTag' => 'tr',
-//			'rowPattern' => '%s',
-//			'keys' => array('name'), //eg: array('name' => '-', 'type' => 'undefined')
-//			'where' => false,
-//			'order' => false
-		));
-		$sReturn = '';
 
-		foreach ($array as $k => $v) {
-
-/*
-			if($attributes['where'] !== false) {
-				$bAddItem = $attributes['where']($k, $v);
-			}
-			else {
-				$bAddItem = true;
-			}
-
-			if($bAddItem) {
-				$sReturn .= '<'.$attributes['rowTag'].'>';
-
-				if(is_array($attributes['keys'])) {
-					foreach($attributes['keys'] as $kp) {
-						if(isset($v[$k][$kp])) {
-							$sReturn .=
-								'<'.$attributes['cellTag'].'>'
-								.$v[$k][$kp]
-								.'</'.$attributes['cellTag'].'>';
-						}
-					}
-				}
-				else {
-					$sReturn .= vsprintf($attributes['pattern'], $v);
-				}
-
-				$sReturn .= '</'.$attributes['rowTag'].'>';
-			}
-
+/**
+ * Test if variable is set, else return null, or secified value
+ * @param variant $var
+ * @param variant $defaultValue
+ */
+	public static function is(&$var, $defaultValue = null) {
+		if (isset($var)) {
+			return $var;
+		}
+		else {
+			return $defaultValue;
 		}
 	}
-*/
+
+
+/**
+ * Add a new label to jsData object
+ * @param array $data
+ */
+	public static function jsLabel($data) {
+		self::$arJsonData['labels'][] = $data;
+	}
+
+
+/**
+ * Add a new data to jsData object
+ * @param array $data
+ */
+	public static function jsData ($data) {
+		self::$arJsonData['data'][] = $data;
+	}
+
 
 /**
  * Format a tree sctrucure of array into html string
@@ -1147,13 +1053,8 @@ class a
 		$sLastKey = '';
 
 		foreach ($tree as $k => &$v) {
-			if(!isset($v['type'])) {
-				$v['type'] = $attributes['defaultType'];
-			}
-
-			if(!isset($v['parent'])) {
-				$v['parent'] = $attributes['defaultParent'];
-			}
+			$v['type'] = self::is($v['type'], $attributes['defaultType']);
+			$v['parent'] = self::is($v['parent'], $attributes['defaultParent']);
 
 			if($v['parent'] === $sLastKey) {
 				$sReturn .= $attributes['groupStartTag'];
@@ -1255,12 +1156,7 @@ class a
 		$newArray = array();
 
 		if($position['pos'] === self::INSERT_BEFORE || $position['pos'] === self::INSERT_AFTER) {
-			if(isset($tree[$position['key']]['parent'])) {
-				$item['parent'] = $tree[$position['key']]['parent'];
-			}
-			else {
-				$item['parent'] = '';
-			}
+			$item['parent'] = self::is($tree[$position['key']]['parent'], '');
 		}
 		else {
 			$item['parent'] = $position['key'];
@@ -1339,7 +1235,6 @@ class a
 
 
 
-//debug{
 	public static function log($message, $attributes = array())
 	{
 //debug{
@@ -1347,7 +1242,7 @@ class a
 //}
 		$attributes = self::applyDefault($attributes, array(
 			'time' => true,
-			'priority' => LOG_DEBUG,
+			'priority' => 'auto',
 			'system' => false,
 			'session' => true,
 			'request' => true
@@ -1374,12 +1269,25 @@ class a
 			return;
 		}
 
-		$sFilename = $_SERVER['DOCUMENT_ROOT']
+		$sSavePath = $_SERVER['DOCUMENT_ROOT']
 			.DIRECTORY_SEPARATOR.'includes'
 			.DIRECTORY_SEPARATOR.'agate'
-			.DIRECTORY_SEPARATOR.'logs'
-			.DIRECTORY_SEPARATOR;
+			.DIRECTORY_SEPARATOR.'logs';
+		$sFilename  = '';
 
+		if ($attributes['priority'] === 'auto') {
+			if(is_array($message)) {
+				if (isset($message['info'])) {
+					$attributes['priority'] = LOG_INFO;
+				}
+				if(isset($message['error'])) {
+					$attributes['priority'] = LOG_ERR;
+				}
+			}
+			else {
+				$attributes['priority'] = LOG_DEBUG;
+			}
+		}
 		switch($attributes['priority']) {
 			case LOG_EMERG:// 	system is unusable
 				$sFilename .= 'emerg_';
@@ -1409,9 +1317,16 @@ class a
 				$sFilename .= 'unknonw_';
 				break;
 		}
-		$sFilename .= date('Ymd').'.log';
+		$sFilename = $sSavePath.DIRECTORY_SEPARATOR.$sFilename.date('Ymd').'.log';
 
-		file_put_contents($sFilename, $message, FILE_APPEND | LOCK_EX);
+		if (@file_put_contents($sFilename, $message, FILE_APPEND | LOCK_EX) === false) {
+			//check if path exist:
+			if (!file_exists($sSavePath)) {
+				mkdir($sSavePath, 0777);
+				//try to write the log again:
+				@file_put_contents($sFilename, $message, FILE_APPEND | LOCK_EX);
+			}
+		}
 	}
 }
 ?>

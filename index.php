@@ -12,7 +12,7 @@ $page = new a();
 
 $page -> gate( array(
 	'lang' => 'en-EN',
-	'title' => 'Web site',
+	'title' => 'Agate-Web Framework',
 	'metaDescription' => 'meta description for website',
 	'metaRobots' => 'description for robots',
 //	'metaGoogleSiteVerification' => ''),

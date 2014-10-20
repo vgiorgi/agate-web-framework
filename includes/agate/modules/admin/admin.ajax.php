@@ -6,9 +6,9 @@ a::module('ajax/response');
 
 class adminAjax extends ajax
 {
-	public function call($sAction)
+	public function call()
 	{
-		switch ($sAction)
+		switch ($this -> sAction)
 		{
 		case 'deleteSection':
 			$this -> deleteSection();

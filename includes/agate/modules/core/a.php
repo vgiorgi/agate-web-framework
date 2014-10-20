@@ -1,118 +1,247 @@
 <?php
+/*
+* This file is a part of AGATE WEB Framework
+* http://agateweb.org/
+*
+* Copyright (C) 2012 Vasile Giorgi
+*
+* Date: Mon May 7 16:18:21 2012
+*/
+
+ini_set('session.hash_function', 'whirlpool');
 session_start();
 /**
- *<b>a::gate web framework</b>
- *module::core::a = the most performant core, used in production mode
+ *<b>a->gate() web framework</b>
+ *module::core::d = the debugging core, used in development mode
  *@author Vasile Giorgi
- *@license lgpl
- *@copyright 2010 (c) Vasile Giorgi
- *@version a.120.421
+ *@copyright 2012 (c) Vasile Giorgi
+ *@version 0.13.0903
  */
 class a
 {
-	const VERSION = '2.1.15';
+	const VERSION = '0.12.0511';//alpha
 	const INSERT_BEFORE = 1;
 	const INSERT_AFTER = 2;
 	const INSERT_CHILD_FIRST = 3;
 	const INSERT_CHILD_LAST = 4;
 
-	private static $arJavaScriptsFromSections = array();
-	private static $arSections = array();
-	private static $arStyleSections = array();
+	private static $arJavaScriptsFromSections = array(); //an array with included javascript for displayed sections
+	private static $arSections = array(); //an array with displayed sections
 	private static $_arNewStatic = ""; //used to extend static methodes for the main class;
 
 	public static $config = array(
 		'name' => 'website',
 		'homepage' => 'index.html',
 		'showErrors' => true,
-		'locale' => 'en-EN',
-		'protocol' => 'http');
+		'locale' => 'en-US',
+		'protocol' => 'http',
+		'isInternalPage' => false);
 	public static $arSiteMap = array();
 	public static $arLayout = array();
 	public static $arJavaScriptsFromModules = array();
-	public static $page = '';
+	public static $page = array();
+//	public static $subpage = '';
 
 
-	/**
-	 *
-	 * The constructor class, call self::init() to be sure it is initialized also with static init call;
-	 */
+/**
+ * Add debug info about the call, this is called on each method on d core.
+ * Method used only in d code.
+ * @param unknown_type $sCall
+ */
+	private static function addDebugCall($sCall) {
+//set the time for last call:
+		$sLastCall = end(self::$arDebug['calls']);
+		self::$arDebug['calls'][key(self::$arDebug['calls'])] = $sLastCall.' - time:'.sprintf('%01.4f ms.', (1000*((microtime(true) - a::$arDebug['time']['current']))));
+//add last call:
+		self::$arDebug['calls'][] =  $sCall;
+		a::$arDebug['time']['current'] = microtime(true);
+	}
+
+
+/**
+ *
+ * The constructor class, call self::init() to be sure it is initialized also with static init call;
+ */
 	public function __construct()
 	{
+
 		self::init();
 	}
 
 
-	/**
-	 *
-	 * Used to define a new method outside the class
-	 * @param string $name
-	 * @param array $arguments
-	 */
+/**
+ * Used to define a new method outside the class
+ * @param string $name
+ * @param array $arguments
+ */
 	public static function __callStatic($name, $arguments)
 	{
+
 		if(isset(self::$_arNewStatic[$name])) {
 			return call_user_func_array(self::$_arNewStatic[$name], $arguments);
 		}
 	}
 
 
-	/**
-	 *
-	 * Used in modules to add static metodes to main a class
-	 * @param string $name - the name of the new method in a class
-	 * @param string $callback - the call made for the new method
-	 */
+/**
+ * Used in modules to add static metodes to main a class
+ * @param string $name - the name of the new method in a class
+ * @param string $callback - the call made for the new method
+ */
 	public static function addStaticMethod($name, $callback)
 	{
-		self::$arDebug['calls'][] = 'addStaticMethod';
+
 		self::$_arNewStatic[$name] = $callback;
 	}
 
 
-	/**
-	 * Used for initialization and for static calls
-	 */
+/**
+ * Private method to apply default values to an array,
+ * mainly used for arrays which can't have specific default values defined
+ */
+	public static function applyDefault($aAttributes, $aDefaultAttributes)
+	{
+
+//		$aDefaultKeys = array_keys($aDefaultAttributes);
+		foreach ($aDefaultAttributes as $k => $v) {
+			if(!array_key_exists($k, $aAttributes)) {
+				$aAttributes[$k] = $v;
+			}
+		}
+/*
+		$iMax = count($aDefaultKeys);
+		for($i = 0; $i < $iMax; $i++) {
+			if(!array_key_exists($aDefaultKeys[$i], $aAttributes)) {
+				$aAttributes[$aDefaultKeys[$i]] = $aDefaultAttributes[$aDefaultKeys[$i]];
+			}
+		}
+*/
+		return($aAttributes);
+	}
+
+
+/**
+ * Check if user has access.
+ * @param string $key - the key (GUID v4) to tested;
+ */
+	public static function hasAccess($key = false) {
+
+
+//key validation:
+		if(!$key) {
+			return FALSE;
+		}
+		if(!is_string($key) || !strlen($key) === 36) {
+			return FALSE;
+		}
+
+//check if user has the key:
+		if(in_array($key, @$_SESSION['agate']['user']['keys'])) {
+			return TRUE;
+		}
+		else {
+			return FALSE;
+		}
+	}
+
+
+/**
+ * Redirect method (shortcut to header('location: [page]'))
+ * @param string $page - the page name(url, permalink)
+ * @param string [$extension] - the page extension (default is html)
+ */
+	public static function redirect($page = '', $extension = '') {
+
+		session_write_close();
+		header('location: /'.$page.$extension);
+		exit();
+	}
+
+
+/**
+ * Used for initialization and for static calls
+ */
 	public static function init()
 	{
-		self::$arDebug['calls'][] = 'init';
-		$arSpecialPages = array('admin', 'section');
+
+		if(!isset($_SESSION['agate'])) {
+			$_SESSION['agate'] = array(
+				'user' => array(
+					'name' => 'guest',
+					'keys' => array()));
+		}
+		require_once($_SERVER['DOCUMENT_ROOT'].'/includes/agate/settings/loader.php');
+		$arSpecialPages = array('section');
 
 //redirects:
 		if(isset($_GET['page'])) {
-			self::$page = $_GET['page'];
+			$page = $_GET['page'];
 
-			if(in_array(self::$page, $arSpecialPages)) {
-				return;
-			}
-//-check if page exist in site map:
+//check if page exist in site map:
 			foreach (self::$arSiteMap as $k => $v) {
-				if($v['name'] === self::$page) {
+				if($v['name'] === $page) {
+					if(isset($v['security'])) {
+						if(!self::hasAccess($v['security'])) {
+							$_SESSION['agate']['loginredirect'] = $page;
+							a::redirect(a::$config['loginpage']);
+						}
+					}
+					self::$page = $v;
 					return;
 				}
 			}
-//-page not forund in site map => redirect to default page:
-			foreach (self::$arSiteMap as $k => $v) {
-				if(array_key_exists('default', $v)) {
-					header('location:'.$v['name'].'.html');
-					//exit();
-					return;
-				}
-			}
-
-//-default page is not defined
-			die(404);
 		}
 		else {
-//	search for default page:
-			foreach (self::$arSiteMap as $k => $v) {
-				if(array_key_exists('default', $v)) {
-					self::$page = $v['name'];
-					return;
-				}
-			}
-			die(404);
+			$page = '';
 		}
+
+//special pages:
+		foreach (self::$config['pages'] as $k => $v) {
+			if($v['name'] === $page) {
+				if(isset($v['security'])) {
+					if(!self::hasAccess($v['security'])) {
+						$_SESSION['agate']['loginredirect'] = $page;
+						a::redirect(a::$config['loginpage']);
+					}
+				}
+				self::$page = $v;
+//specific logic for special pages:
+				switch(self::$page['name'].'.html') {
+					case self::$config['loginpage']:
+						self::$config['root'] =
+							$_SERVER['DOCUMENT_ROOT']
+							.DIRECTORY_SEPARATOR.'includes'
+							.DIRECTORY_SEPARATOR.'agate'
+							.DIRECTORY_SEPARATOR.'modules'
+							.DIRECTORY_SEPARATOR.'admin';
+						self::$config['isInternalPage'] = true;
+						break;
+					case 'admin':
+						self::$config['root'] =
+							$_SERVER['DOCUMENT_ROOT']
+							.DIRECTORY_SEPARATOR.'includes'
+							.DIRECTORY_SEPARATOR.'agate'
+							.DIRECTORY_SEPARATOR.'modules'
+							.DIRECTORY_SEPARATOR.'admin';
+						//self::module('admin/onyx');
+						break;
+				}
+				return;
+			}
+		}
+
+
+//page not set or page not forund in site map => redirect to default page:
+		foreach (self::$arSiteMap as $k => $v) {
+			if(array_key_exists('default', $v)) {
+				a::redirect($v['name'].'.html');
+				return;
+			}
+		}
+
+//default page is not defined
+		a::redirect(a::$config['404page']);
+		die(404);
 	}
 
 
@@ -121,20 +250,27 @@ class a
  * @param string $filename = filename,
  * 	it must have php extension and exist in root/cache/ folder
  */
-	 public static function cacheLoad($filename) {
-		self::$arDebug['calls'][] = 'cacheLoad';
-		require_once(self::$config['root'].DIRECTORY_SEPARATOR.'cache'.DIRECTORY_SEPARATOR.$filename.'.php');
+	public static function cacheLoad($filename)
+	{
+
+		require_once(self::$config['root']
+			.DIRECTORY_SEPARATOR.'cache'
+			.DIRECTORY_SEPARATOR.$filename.'.php');
 	}
 
 
 /**
  * Save cache file
- * @param sting $sFile
+ * @param string $filename = filename,
+ * 	it must have php extension and exist in root/cache/ folder
  */
-	public static function cacheSave($sFile) {
+	public static function cacheSave($filename) {
+
 		self::$arDebug['calls'][] = 'cacheSave';
-		$sFileName = self::$config['root'].DIRECTORY_SEPARATOR.'cache'.DIRECTORY_SEPARATOR.$sFile.'.php';
-		switch ($sFile) {
+		$sFileName = self::$config['root']
+			.DIRECTORY_SEPARATOR.'cache'
+			.DIRECTORY_SEPARATOR.$filename.'.php';
+		switch ($filename) {
 		case 'sections':
 			$sFileContent = "<?php\na::\$arLayout = ".var_export(a::$arLayout, true).";\n?>";
 			break;
@@ -143,81 +279,70 @@ class a
 			break;
 		}
 		return(file_put_contents($sFileName, $sFileContent, LOCK_EX));
-/*or:
-		if (is_writable($sFileName)) {
-			if (!$handle = @fopen($sFileName, 'w')) {
-				echo 'Cannot open file ('.$sFileName.')';
-				return false;
-			}
-			if (fwrite($handle, $sFileContent) === FALSE) {
-				echo 'Cannot write to file ('.$sFileName.')';
-				return false;
-			}
-			fclose($handle);
-			return true;
-		}
-		else {
-			echo 'The file '.$filename.' is not writable';
-			return false;
-		}
-*/
-	}
-/**
- *
- * aGatePhp Library info
- */
-	public static function info() {
-		self::$arDebug['calls'][] = 'info';
-		echo('<h1>a::lib</h1><ul><li><span>version:</span><span>'.self::VERSION.'</span></li></ul>');
-		echo('<pre>'.print_r(self::$arSections, true).'</pre>');
 	}
 
-	/**
-	 *Module method, used to include a a class module
-	 * @param string $sModuleName - module name
-	 * @tutorial standard modules are maintened and stored in modules folder.
-	 */
+
+/**
+ *Module method, used to include a class module
+ * @param string $sModuleName - module name
+ * @tutorial standard modules are maintened and stored in modules folder.
+ */
 	public static function module($sModuleName)
 	{
-		self::$arDebug['calls'][] = 'module';
+
 		$arModule = explode(':', $sModuleName);
 		$iMax = count($arModule);
-		$sModulePath = $_SERVER['DOCUMENT_ROOT'].DIRECTORY_SEPARATOR.'includes'.DIRECTORY_SEPARATOR.'aGatePhp'.DIRECTORY_SEPARATOR.'modules';
+//		$sModulePath = $_SERVER['DOCUMENT_ROOT']
+//			.DIRECTORY_SEPARATOR.'includes'
+//			.DIRECTORY_SEPARATOR.'agate'
+//			.DIRECTORY_SEPARATOR.'modules';
+		$sModulePath = $_SERVER['DOCUMENT_ROOT'].'/includes/agate/modules';
 		for($i=0; $i<$iMax; $i++) {
-			$sModulePath .= DIRECTORY_SEPARATOR.$arModule[$i];
+			$sModulePath .= '/'.$arModule[$i];
 		}
 		$sModulePath .= '.php';
 		require_once $sModulePath;
-		self::$arDebug['modules'][] = $sModulePath;
+		self::$arDebug['modules'][] = $sModuleName;
 	}
 
 
+/**
+ * Obtain the section content
+ * @param string_type $sSectionName
+ * @param array_type $aAttributes
+ * @return string
+ */
 	public static function getSection($sSectionName, $aAttributes = array())
 	{
-		self::$arDebug['calls'][] = 'getSection';
+
 		ob_start();
 		self::section($sSectionName, $aAttributes);
 		return ob_get_clean();
 	}
 
 
-	/**
-	 * Include section in the code = a particular shortcut of include_once
-	 * @param string $sSectionName = the name of the section
-	 * @param array $arFilter = used to filter the result, if not specified no filter is applied
-	 * 	possible filters are:
-	 * 		- including the perimited values in $arFilter['permited'], can be specified the default value in case of section is not in permited array
-	 */
+/**
+ * Include section in the code = a particular shortcut of include_once
+ * @param string $sSectionName = the name of the section
+ * @param array $arFilter = used to filter the result, if not specified no filter is applied
+ * 	possible filters are:
+ * 		- including the perimited values in $arFilter['permited'], can be specified the default value in case of section is not in permited array
+ */
 	public static function section($sSectionName, $aAttributes = array())
 	{
-		self::$arDebug['calls'][] = 'section';
+
+
 		$aAttributes = self::applyDefault($aAttributes, array(
-				'class' => 'section',
-				'id' => $sSectionName,
-				'javascript' => array(),
-				'type' => 'php',
-				'wrapper' => true
+			'class' => 'section',
+			'id' => $sSectionName,
+			'javascript' => array(),
+			'type' => 'php',
+			'wrapper' => true,
+			'tag' => 'div',
+			'close' => true,
+			'root' => self::$config['root']
 		));
+
 		switch($aAttributes['type']) {
 			case 'html':
 				$sExtension = '.html';
@@ -236,8 +361,16 @@ class a
 				else {
 					$aAttributes['class'] .= ' section-menu';
 				}
-				$aAttributes['id'] = 'menu'.$aAttributes['id'];
 				break;
+			case 'post':
+				if($aAttributes['class'] === 'section') {
+					$aAttributes['class'] = ' section-post';
+				}
+				else {
+					$aAttributes['class'] .= ' section-post';
+				}
+				break;
+
 			default:
 				$sExtension = '.php';
 				if($aAttributes['class'] !== 'section') {
@@ -246,19 +379,128 @@ class a
 		}
 
 		if($aAttributes['wrapper']) {
-			echo('<div id="'.$aAttributes['id'].'" class="'.$aAttributes['class'].'">');
+			echo('<'.$aAttributes['tag'].' ');
+			if($aAttributes['type'] !== 'box') {
+				echo('id="'.$aAttributes['id'].'" ');
+			}
+			echo('class="'.$aAttributes['class'].'">');
 		}
 
 		switch($aAttributes['type']) {
 		case 'html':
 		case 'php':
 			include(
-				self::$config['root']
+				$aAttributes['root']
 				.DIRECTORY_SEPARATOR.'sections'
 				.DIRECTORY_SEPARATOR.$sSectionName.$sExtension);
 			break;
+		case 'post':
+			if(isset($_GET['id'])) {
+				if(isset($aAttributes['template'])) {
+					$template = $aAttributes['template'];
+				}
+				else {
+					$template =
+						'<h1>{title}</h1>'
+						.'<h3>Date:{date}, Author:{author}</h3>'
+						.'<div class="post-content">{content}</div>';
+				}
+				$sql =
+					"SELECT "
+						."`posts`.`content`, "
+						."`posts`.`title`, "
+						."`posts`.`date`, "
+						."`users`.`display_name` AS `author` ";
+					if(isset($aAttributes['metaPost'])) {
+						$iMax = count($aAttributes['metaPost']);
+						for($i = 0; $i < $iMax; $i++) {
+							if(!isset($aAttributes['template'])) {
+								$template .=
+									'<div class="'.$aAttributes['metaPost'][$i].'">'
+										.'{'.$aAttributes['metaPost'][$i].'}'
+									.'</div>';
+							}
+							$sql .= ", ("
+								."SELECT `value` FROM `postmeta` "
+								."WHERE "
+									."`postmeta`.`post`= `posts`.`id` "
+									."AND `postmeta`.`key` = '".$aAttributes['metaPost'][$i]."') "
+									."AS `".$aAttributes['metaPost'][$i]."` ";
+						}
+					}
+					$sql .=
+						"FROM "
+							."`posts` "
+							."LEFT JOIN `users` ON `posts`.`author` = `users`.`id` "
+						."WHERE "
+							."`posts`.`permalink` = '".$_GET['id']."' ";
+
+				echo(self::dbAtos($sql, $template));
+
+/*
+
+				$permalink = $_GET['id'];
+				$arPost = self::dbLookupRow(
+						"`title`, "
+						."`content`, "
+						."(SELECT `value` FROM `postmeta` WHERE `postmeta`.`post`= `posts`.`id` AND `key` = 'album') AS `gallery` ",
+						"`posts`", "`permalink` = '".$_GET['id']."'", MYSQLI_ASSOC);
+				echo('<h1>'.$arPost['title'].'</h1>');
+				echo('<div class="content">'.$arPost['content'].'</div>');
+				if($arPost['gallery'] !== null) {
+					echo('<div class="galleria">'.$arPost['gallery'].'</div>');
+				}
+*/
+			}
+			else {
+				//get the top 10 posts from db:
+				echo('<div class="list-posts">');
+				$sql =
+					"SELECT "
+						."`posts`.`title`, "
+						."`posts`.`excerpt`, "
+						."`posts`.`permalink`, "
+						."`posts`.`date`, "
+						."`users`.`display_name` AS `author` ";
+				if(isset($aAttributes['metaList'])) {
+					$iMax = count($aAttributes['metaList']);
+					for($i = 0; $i < $iMax; $i++) {
+						$sql .= ", ("
+							."SELECT `value` FROM `postmeta` "
+							."WHERE "
+								."`postmeta`.`post` = `posts`.`id` "
+								."AND `postmeta`.`key` = '".$aAttributes['metaList'][$i]."') "
+							."AS `".$aAttributes['metaList'][$i]."` ";
+					}
+				}
+				$sql .=
+					"FROM "
+						."`posts` "
+						."LEFT JOIN `users` ON `posts`.`author` = `users`.`id` "
+					."WHERE "
+						."`posts`.`key` = '".$aAttributes['key']."' "
+					."ORDER BY "
+						."`posts`.`date` DESC "
+					."LIMIT 0, 10;";
+
+				echo(self::dbAtos($sql, $aAttributes['pattern']));
+				echo('</div>');
+			}
+			break;
 		case 'item':
-			echo('<pre>ITEM:'.$sSectionName.'</pre>');
+//			echo('<pre>ITEM:'.$sSectionName.'</pre>');
+			if(isset($aAttributes['subpage']) && $aAttributes['subpage'] === true) {
+				$subpage = self::$page['name'];
+			}
+			else {
+				$subpage = '';
+			}
+
+			self::pageMenuItem(
+				$sSectionName,
+				vsprintf(self::$arLayout[$aAttributes['parent']]['pattern'], $aAttributes['items']),
+				$aAttributes['class'],
+				$subpage);
 			break;
 
 		case 'box':
@@ -266,103 +508,74 @@ class a
 //do nothing;
 			break;
 		}
-/*
-		if($aAttributes['type'] === 'menu') {
-			if(!isset($aAttributes['default'])) {
-				$aAttributes['default'] = '';
-			}
-			if(!isset($aAttributes['parent'])) {
-				$aAttributes['parent'] = '';
-			}
-	/*		foreach ($aAttributes['children'] as $menuTile => $menuLabels) {
-				if($menuTile === $aAttributes['default']) {
-					$bIsDefault = true;
-				}
-				else {
-					$bIsDefault = false;
-				}
-				a::pageMenuItem(
-					$menuTile,
-					vsprintf($aAttributes['pattern'], $menuLabels),
-					'',
-					$aAttributes['parent'],
-					$bIsDefault);
-			}
 
-		}
-		else {
-
-		}
-*/
-		if($aAttributes['wrapper']) {
+		if($aAttributes['wrapper'] && $aAttributes['close']) {
 			echo('</div>');
 		}
 
 		if(count($aAttributes['javascript']) > 0) {
-			self::$arJavaScriptsFromSections[] = $aAttributes['javascript'];
+			self::$arJavaScriptsFromSections[] = $aAttributes['name'].'.js';
 		}
-		if(!in_array($sSectionName, self::$arSections)) {
-			self::$arSections[] = $aAttributes['id'];
+
+		if(isset($aAttributes['sid'])) {
+			self::$arSections[] = $aAttributes['sid'];
+		}
+	}
+
+
+	private function isSectionVisible($sSectionKey)
+	{
+
+
+		$aSection = self::$arLayout[$sSectionKey];
+//check hide in:
+		if (isset($aSection['hidein'])) {
+			if (in_array(self::$page['name'], $aSection['hidein'])) {
+				return false;
+			}
+			if (isset($_GET['id'])) {
+				if(in_array(self::$page['name'].'/'.$_GET['id'], $aSection['hidein'])) {
+					return false;
+				}
+			}
+		}
+
+//check show in:
+		if (isset($aSection['showin'])) {
+			if (isset($_GET['id'])) {
+				if (!in_array(self::$page['name'].'/'.$_GET['id'], $aSection['showin'])) {
+					if (!in_array(self::$page['name'], $aSection['showin'])) {
+						return false;
+					}
+				}
+			}
+			else {
+				if (!in_array(self::$page['name'], $aSection['showin'])) {
+					return false;
+				}
+			}
+		}
+
+
+//check parent visibility:
+		if ($aSection['parent'] === '') {
+			return true;
+		}
+		else {
+			return self::isSectionVisible($aSection['parent']);
 		}
 	}
 
 
 /**
- * Private method to apply default values to an array, mainly used for arrays which can't have specific default values defined
+ * Get the content of the website body
  */
-	public static function applyDefault($aAttributes, $aDefaultAttributes)
-	{
-		self::$arDebug['calls'][] = 'applyDefault';
-		$aDefaultKeys = array_keys($aDefaultAttributes);
-		$iMax = count($aDefaultKeys);
-		for($i=0; $i<$iMax; $i++)
-		{
-			if(!array_key_exists($aDefaultKeys[$i], $aAttributes))
-			{
-				$aAttributes[$aDefaultKeys[$i]] = $aDefaultAttributes[$aDefaultKeys[$i]];
-			}
-		}
-		return($aAttributes);
-	}
-
-//this will be depricated, because the style will be integrated into the section istelf
-	private function buildLayoutStyle() {
-		self::$arDebug['calls'][] = 'buildLayoutStyle';
-		foreach(self::$arSections  as $k => $v) {
-			if(!isset($v['type'])) {
-				$v['type'] = 'box';
-			}
-
-			switch ($v['type']) {
-			case 'box':
-			case 'switch':
-			case 'widget':
-//case 1 = the style must be specified to be included:
-				if(isset($v['style']) && $v['style'] === true) {
-					self::$arStyleSections[] = $v['name'];
-				}
-				break;
-			case 'html':
-			case 'menu':
-			case 'php':
-//case 2 = the style is included by default, if it is spefified (false) will not be included;
-				if(!isset($v['style']) || $v['style'] === true) {
-					self::$arStyleSections[] = $v['name'];
-				}
-				break;
-//case 3 = no style for this section:
-			case 'item':
-				//no style for this section type
-				break;
-			}
-		}
-	}
-
-
 	private function getBodyContent()
 	{
-		self::$arDebug['calls'][] = 'getBodyContent';
+
 		$sReturn = '';
+/*
+		$aReturn = array();
 
 		$aSwitch = array();
 		foreach(self::$arLayout as $k => &$v) {
@@ -375,7 +588,7 @@ class a
 			}
 			else {
 				if ($v['parent'] !== '' && self::$arLayout[$v['parent']]['type'] === 'switch') {
-					if ($v['name'] === self::$page) {
+					if ($v['name'] === self::$page['name']) {
 						$v['show'] = true;
 					}
 					else {
@@ -388,164 +601,105 @@ class a
 			}
 
 			if($v['show'] === true) {
+//				$sReturn .= self::getSection($v['name'], $v);
+				if($v['parent'] === '') {
+					$aReturn[] = $v['name'];
+				}
+				else {
+					$aReturn[self::$arLayout[$v['parent']]['name']][] = $v['name'];
+				}
+			}
+		}
+*/
+//		$attributes = array(
+//				'itemStartTag' => '<div>',
+//				'itemEndTag' => '</div>',
+//				'groupStartTag' => '<ul>',
+//				'groupEndTag' => '</ul>',
+//				'pattern' => '<div id="%s" class="%s"><span class="name">%s</span></div>',
+//				'defaultType' => 'box',
+//				'defaultParent' => ''));
+
+		$sReturn = '';
+		$sLastParentKey = '';
+		$sLastKey = '';
+		$sLastParentType = '';
+
+		foreach (self::$arLayout as $k => &$v) {
+			if(self::isSectionVisible($k)) {
+				if(!isset($v['type'])) {
+					$v['type'] = 'box';
+				}
+
+				if(!isset($v['parent'])) {
+					$v['parent'] = '';
+				}
+
+				if($v['type'] === 'item') {
+					$v['wrapper'] = false;
+				}
+
+				if($v['parent'] !== $sLastKey) {
+					if($sLastParentType !== 'item') {
+						$sReturn .= '</div>';
+					}
+					while($v['parent'] !== $sLastParentKey) {
+						$sReturn .= '</div>';
+						$sLastParentKey = self::$arLayout[$sLastParentKey]['parent'];
+					}
+				}
+
+				if($v['type'] === 'item') {
+					$v['wrapper'] = false;
+				}
+				$v['close'] = false;
+				$v['sid'] = $k;
+
 				$sReturn .= self::getSection($v['name'], $v);
+				$sLastKey = $k;
+				$sLastParentKey = $v['parent'];
+				$sLastParentType = $v['type'];
 			}
 		}
 
+		$sReturn .= '</div>';
+		while($sLastParentKey !== '') {
+			$sReturn .= '</div>';
+			$sLastParentKey = self::$arLayout[$sLastParentKey]['parent'];
+		}
+		//$sReturn .= '</div>';
 		return($sReturn);
 	}
 
 
-	private function buildLayoutStyleOld($sSectionName, $arSection) {
-		self::$arDebug['calls'][] = 'buildStyleOld';
-		if(!isset($arSection['type'])) {
-			$arSection['type'] = 'box';
+	private function buildLayoutStyle() {
+
+		$arStyleSections = array();
+		foreach(self::$arSections  as $k => $v) {
+			if(isset(self::$arLayout[$v]['style']) && self::$arLayout[$v]['style'] === true) {
+				$arStyleSections[] = array(
+					'file' => $_SERVER['DOCUMENT_ROOT']
+						.DIRECTORY_SEPARATOR.'sections'
+						.DIRECTORY_SEPARATOR.'style'
+						.DIRECTORY_SEPARATOR.self::$arLayout[$v]['name'].'.css',
+					'location' => 'relative');
+			}
 		}
-
-		switch($arSection['type']) {
-		case 'box':
-			if(isset($arSection['style']) && $arSection['style'] === true) {
-				self::$arStyleSections[] = $sSectionName;
-			}
-			if (isset($arSection['children']) && count($arSection['children']) > 0) {
-				foreach($arSection['children'] as $k => $v) {
-					self::buildLayoutStyle($k, $v);
-				}
-			}
-			break;
-		case 'html':
-		case 'php':
-			if(!isset($arSection['style']) || $arSection['style'] === true) {
-				self::$arStyleSections[] = $sSectionName;
-			}
-			break;
-		case 'menu':
-			self::$arStyleSections[] = 'menu.'.$sSectionName;
-			break;
-		case 'mnu':
-			self::$arStyleSections[] = 'menu.'.$sSectionName;
-			break;
-		case 'list':
-		case 'switch':
-			if(isset($arSection['style']) && $arSection['style'] === true) {
-				self::$arStyleSections[] = $sSectionName;
-			}
-			if (isset($arSection['children']) && count($arSection['children']) > 0) {
-				if(array_key_exists(self::$page, $arSection['children'])) {
-					self::buildLayoutStyle(self::$page, $arSection['children'][self::$page]);
-				}
-			}
-
-//			if(isset($arSection['style']) && $arSection['style'] === true) {
-//				self::$arStyleSections[] = $sSectionName;
-//			}
-
-			break;
-		}
+		return($arStyleSections);
 	}
 
 
 /**
- *
- * Enter description here ...
- * @param unknown_type $sSectionName
- * @param unknown_type $arSection
+ * Output a formated html(5) page
+ * @param (array) $aAttributes = page attributes:
+ *  @attribute lang <i>string</i>: language; default value: 'en-EN'
+ *  @attribute metaCharset<i>string</i>: the charset; default value: 'UTF-8'
+ *  @attribute title <i>string</i>: The page title; default value: 'website'
+ *  [...]
  */
-	private function buildLayoutSection($sSectionName, $arSection) {
-		self::$arDebug['calls'][] = 'buildLayoutSection';
-		$arDebug['layoutSection'][] = array('name' => $sSectionName, 'section' => $arSection);
-		if(isset($arSection['showin'])) {
-			if(!in_array(self::$page, $arSection['showin'])) {
-				return;
-			}
-		}
-		if (!isset($arSection['type'])) {
-			$arSection['type'] = 'box';
-		}
-		$sClass = '';
-		if(isset($arSection['class'])) {
-			$sClass .= $arSection['class'].' ';
-		}
-		$sId = '';
-		switch($arSection['type']) {
-		case 'box':
-			$sClass .= 'section-box';
-			if(isset($arSection['style'])) {
-				$sId = 'id="'.$sSectionName.'" ';
-			}
-			echo('<div '.$sId.' class="'.$sClass.'">');
-			if (isset($arSection['children']) && count($arSection['children']) > 0) {
-				foreach($arSection['children'] as $k => $v) {
-					self::buildLayoutSection($k, $v);
-				}
-			}
-			echo('</div>');
-			break;
-		case 'php':
-			self::section($sSectionName, $arSection);
-			break;
-		case 'html':
-			self::section($sSectionName, $arSection);
-			break;
-		case 'mnu':
-			$sClass .= 'section-menu';
-			$sId='menu'.$sSectionName;
-			echo('<div id="'.$sId.'" class="'.$sClass.'">');
-			include($_SERVER['DOCUMENT_ROOT']
-				.DIRECTORY_SEPARATOR.'sections'
-				.DIRECTORY_SEPARATOR.'menu.'.$sSectionName.'.php');
-			echo('</div>');
-			break;
-		case 'menu':
-			self::section($sSectionName, $arSection);
-			break;
-		case 'list':
-//			$sClass .= ' section-list';
-//			echo('<div id="'.$sSectionName.'" class="'.$sClass.'">list:'.$sSectionName.'</div>');
-			break;
-		case 'switch':
-			$sClass .= 'section-switch';
-			echo('<div id="'.$sSectionName.'" class="'.$sClass.'">');
-			if (isset($arSection['children']) && count($arSection['children']) > 0) {
-				if(array_key_exists(self::$page, $arSection['children'])) {
-					//switch based by $_GET[page]
-					self::buildLayoutSection(self::$page, $arSection['children'][self::$page]);
-				}
-				else {
-					if(isset($_GET['id'])) {
-						if(array_key_exists($_GET['id'], $arSection['children'])) {
-							self::buildLayoutSection(self::$page.'-'.$_GET['id'], $arSection['children'][$_GET['id']]);
-						}
-					}
-					else {
-						//search for default section...
-						foreach ($arSection['children'] as $k => $v) {
-							if(array_key_exists('default', $v) && $v['default'] === true) {
-								self::buildLayoutSection(self::$page.'-'.$k, $arSection['children'][$k]);
-								return;
-							}
-						}
-					}
-				}
-			}
-			echo('</div>');
-			break;
-		}
-//		self::section($arSection);
-	}
-
-
-	/**
-	 * Output a formated html(5) page
-	 * @param array $aAttributes = page attributes:
-	 *  @attribute lang <i>string</i>: language; default value: 'en-EN'
-	 *  @attribute metaCharset<i>string</i>: the charset; default value: 'UTF-8'
-	 *  @attribute title <i>string</i>: The page title; default value: 'website'
-	 *  [...]
-	 */
-	public function page($aAttributes)
+	public function gate($aAttributes)
 	{
-		self::$arDebug['calls'][] = 'page';
+
 		$aAttributes = self::applyDefault($aAttributes, array(
 			'lang' => 'en-EN',
 			'metaCharset' => 'UTF-8',
@@ -557,8 +711,70 @@ class a
 			'body' => 'website',
 			'footer' => 'footer'));
 
-		$sBodyContent = self::getBodyContent();
 
+//special pages logic
+		if (self::$config['isInternalPage']) {
+			$aAttributes['style']['screen'] = array(
+				array(
+					'file' => $_SERVER['DOCUMENT_ROOT'].'/includes/agate/modules/admin/style.css',
+					'location' => 'relative'));
+		}
+
+		switch(self::$page['name']) {
+			case 'admin':
+				$sBodyContent = self::getSection('website');
+				break;
+			case 'post':
+				if(isset($_GET['id'])) {
+					$sBodyContent =
+						'<div id="post'.$_GET['id'].'">'
+							.self::dbLookup(
+								"`content`",
+								"`posts`",
+								"`id` = ".$_GET['id'])
+						.'</div>';
+				}
+				else {
+					$sBodyContent = '<div id="post"></div>';
+				}
+				break;
+			case 'section': //one page only with one section used for section preview
+				if(isset($_GET['id'])) {
+					$sBodyContent = self::getSection($_GET['id'], $_GET);
+				}
+				else {
+					$sBodyContent = '<h1>Missing parameter: GET[id]!</h1>';
+				}
+				break;
+			case 'login': //login page
+				$sBodyContent = self::getSection('login');
+				break;
+
+			default:
+				$sBodyContent = self::getBodyContent();
+//				if(count(self::$arLayout) > 0) {
+//					print_r($sBodyContent);
+//					//echo($sBodyContent);
+//				}
+//				else {
+//					self::section($aAttributes['body']);
+//				}
+				break;
+		}
+
+//the page attribute will overwrite the default attrs:
+		foreach($aAttributes as $k => $v) {
+			if (isset(self::$page[$k])) {
+				if($k === 'javascript') {
+					$aAttributes[$k] = array_merge_recursive($aAttributes[$k], self::$page[$k]);
+				}
+				else {
+					$aAttributes[$k] = self::$page[$k];
+				}
+			}
+		}
+
+		header('Content-Type:text/html utf-8');
 		echo('<!DOCTYPE html>');
 		echo('<html lang="'.$aAttributes['lang'].'">'."\n");
 
@@ -573,37 +789,23 @@ class a
 		echo('<title>'.$aAttributes['title'].'</title>');
 
 		if(count(self::$arSections) > 0) {
-//			foreach(self::$arLayout as $k => $v) {
-//				self::buildLayoutStyle($k, $v);
-//			}
-			$iMax = count(self::$arSections);
-			if($iMax > 0) {
-				for ($i = 0; $i < $iMax; $i++) {
-					$arStyle [] = array(
-						'file' => $_SERVER['DOCUMENT_ROOT']
-							.DIRECTORY_SEPARATOR.'sections'
-							.DIRECTORY_SEPARATOR.'style'
-							.DIRECTORY_SEPARATOR.self::$arSections[$i].'.css',
-						'location' => 'relative');
-				}
-				if(isset($aAttributes['style']['screen'])) {
-					$aAttributes['style']['screen'] = array_merge_recursive($aAttributes['style']['screen'], $arStyle);
-				}
-				else {
-					$aAttributes['style']['screen'] = $arStyle;
-				}
+			if(isset($aAttributes['style']['screen'])) {
+				$aAttributes['style']['screen'] = array_merge_recursive($aAttributes['style']['screen'], self::buildLayoutStyle());
+			}
+			else {
+				$aAttributes['style']['screen'] = self::buildLayoutStyle();
 			}
 		}
 
 		if(count($aAttributes['style']) > 0) {
 			if(isset($aAttributes['style']['screen'])) {
 				$_SESSION['A_TMP_PAGE_STYLE_SCREEN'] = $aAttributes['style']['screen'];
-				echo('<link type="text/css" href="/includes/aGatePhp/style.php?media=screen" rel="stylesheet" media="screen"/>');
+				echo('<link type="text/css" href="/includes/agate/style.php?media=screen" rel="stylesheet" media="screen"/>');
 			}
 
 			if(isset($aAttributes['style']['print'])) {
 				$_SESSION['A_TMP_PAGE_STYLE_PRINT'] = $aAttributes['style']['print'];
-				echo('<link type="text/css" href="/includes/aGatePhp/style.php?media=print" rel="stylesheet" media="print"/>');
+				echo('<link type="text/css" href="/includes/agate/style.php?media=print" rel="stylesheet" media="print"/>');
 			}
 
 			if(isset($aAttributes['style']['web'])) {
@@ -617,32 +819,27 @@ class a
 
 
 //check if page has its own class
-		if (isset(self::$arSiteMap[self::$page]['class'])) {
-			echo('<body class="'.self::$arSiteMap[self::$page]['class'].'">');
+		if (isset(self::$page['class'])) {
+			echo('<body class="'.self::$page['class'].'">');
 		}
 		else {
 			echo('<body>');
 		}
 
-		switch(self::$page) {//special sections logic
-			case 'section': //one page only with one section used for section preview
-				if(isset($_GET['id'])) {
-					self::section($_GET['id'], $_GET);
-				}
-				else {
-					echo('<h1>Missing parameter: GET[id]!</h1>');
-				}
-				break;
-			default:
-				if(count(self::$arLayout) > 0) {
-					echo($sBodyContent);
-				}
-				else {
-					self::section($aAttributes['body']);
-				}
-				break;
+//if user is logged in display the user bar
+		if (isset($_SESSION['agate']['user']['id']) && self::$page['name'] !== 'section' && self::$page['name'] !== 'post') {
+			self::section('agate-onyx', array(
+				'root' => $_SERVER['DOCUMENT_ROOT'].'/includes/agate/modules/admin/',
+				'type' => 'php'));
+			self::section('agate-onyx-separator', array(
+				'type' => 'separator',
+				'wrapper' => true));
+//			echo('<div id="agate-onyx">');
+//			include($_SERVER['DOCUMENT_ROOT'].'/includes/agate/modules/admin/sections/agate-onyx.php');
+//			echo('</div>');
+//			echo('<div id="agate-onyx-separator"></div>');
 		}
-
+		echo($sBodyContent);
 //		echo('<div class="push"></div></div>');
 //		self::section($aAttributes['footer']);
 
@@ -661,7 +858,7 @@ class a
 		echo('<script type="text/javascript">');
 		$iMax = count(self::$arJavaScriptsFromModules);
 		if($iMax > 0) {
-			echo('/*Modules*/');
+
 			for($i=0; $i<$iMax; $i++) {
 				include_once($_SERVER['DOCUMENT_ROOT']
 				.DIRECTORY_SEPARATOR.'includes'
@@ -672,29 +869,33 @@ class a
 		}
 		$iMax = count(self::$arJavaScriptsFromSections);
 		if($iMax > 0) {
-			echo('/*Sections*/');
+
 			for($i=0; $i<$iMax; $i++) {
-				include_once($_SERVER['DOCUMENT_ROOT']
-				.DIRECTORY_SEPARATOR.'sections'
-				.DIRECTORY_SEPARATOR.self::$arJavaScriptsFromSections[$i]);
+				include($_SERVER['DOCUMENT_ROOT']
+					.DIRECTORY_SEPARATOR.'sections'
+					.DIRECTORY_SEPARATOR.self::$arJavaScriptsFromSections[$i]);
 			}
 		}
 		echo('</script>');
 
 		echo('</body>'."\n");
 		echo('</html>');
+
 	}
 
 
-	/**
-	 * Enter description here ...
-	 * @param string $sPageName
-	 * @param string $sLabel
-	 * @param string $sClass
-	 * @param string $sGetVar
-	 */
-	public static function pageMenuItem($sPageName, $sLabel, $sClass='', $sPageCategory = '', $bIsDefaultMenu = false, $sGetVar='page') {
-		self::$arDebug['calls'][] = 'pageMenuItem';
+/**
+ * Output a menu item
+ * @param (string) $sPageName - page name
+ * @param (string) $sLabel - the menu label
+ * @param (string) $sClass - the label class, default = ''
+ * @param (string) $sPageCategory - the category of the page, default = ''
+ * @param (bool) $bIsDefaultMenu - is the default menu, default = FALSE
+ * @param (string) $sGetVar - the $_GET member used for check, default = 'page'
+ */
+	public static function pageMenuItem($sPageName, $sLabel, $sClass = '', $sPageCategory = '', $bIsDefaultMenu = false, $sGetVar='page') {
+
+
 		if($sClass === '') {
 			$sClass .= $sPageName;
 		}
@@ -717,16 +918,17 @@ class a
 		echo('<a href="'.$sUrl.'" '.$sClass.'>'.$sLabel.'</a>');
 	}
 
-	/**
-	 * Enter description here ...
-	 * @param unknown_type $iGridSize
-	 * @param unknown_type $iGridPrefix
-	 * @param unknown_type $iGridSuffix
-	 * @param unknown_type $iGridPush
-	 */
+
+/**
+ * Output a 960 grid cell
+ * @param (integer) $iGridSize = cell size (1 - 12|16)
+ * @param (integer) $iGridPrefix = cell prefix
+ * @param (integer) $iGridSuffix = cell suffix
+ * @param (integer) $iGridPush = cell push
+ */
 	public static function gs($iGridSize = 0, $iGridPrefix = 0, $iGridSuffix = 0, $iGridPush = 0)
 	{
-		self::$arDebug['calls'][] = 'gs';
+
 		if($iGridSize > 0)
 		{
 			$sClass = 'grid_'.$iGridSize;
@@ -756,42 +958,116 @@ class a
 		}
 	}
 
-	/**
-	 * Enter description here ...
-	 */
+
+/**
+ * Close a 960 grid cell
+ */
 	public static function gs_x()
 	{
+
 		self::$arDebug['calls'][] = 'gs_x';
 		echo('</div>');
 	}
 
-	/**
-	 * Enter description here ...
-	 */
+
+/**
+ * Clear for 960 grid
+ */
 	public static function gs_clear()
 	{
+
 		self::$arDebug['calls'][] = 'gs_clear';
 		self::gs();
 	}
 
 
-	public static function outputDebugBox($sDebugValue, $sTitle = FALSE)
+
+
+//in testing:
+	public static function arrayToString($array, $attributes = array())
 	{
-		self::$arDebug['calls'][] = 'outputDebugBox';
-		echo('<div class="debug">');
-		echo('<a href="javascript:;" onclick="debug.utils.toggleContent(this)">[+] Show</a>');
-		if($sTitle)
-		{
-			echo('<h1>'.$sTitle.'</h1>');
+
+		$attributes = self::applyDefault($attributes, array(
+			'fields' => array('key'),
+			'where' => false));
+
+		foreach ($array as $k => $v) {
+			if($attributes['where'] !== false) {
+				$bAddItem = $attributes['where']($k, $v);
+			}
+			else {
+				$bAddItem = true;
+			}
+			if($bAddItem) {
+				$arRow = array($k);
+				foreach ($attributes['fields'] as $vf) {
+					if(isset($array[$k][$vf])) {
+						$arRow = array_merge($arRow, $array[$k][$vf]);
+					}
+					else {
+						$arRow = array_merge($arRow, '');
+					}
+				}
+				$aReturn['data'][] = array($k, $v['name']);
+			}
 		}
-		echo('<pre class="content">'.$sDebugValue.'</pre>');
-		echo('</div>');
 	}
+/*
+	public static function arrayToString($array, $attributes = array()) {
 
+		$attributes = self::applyDefault($attributes, array(
+//			'cellTag' => 'td',
+//			'rowTag' => 'tr',
+//			'rowPattern' => '%s',
+//			'keys' => array('name'), //eg: array('name' => '-', 'type' => 'undefined')
+//			'where' => false,
+//			'order' => false
+		));
+		$sReturn = '';
 
-	public static function treeToString($array, $attributes = array())
+		foreach ($array as $k => $v) {
+
+/*
+			if($attributes['where'] !== false) {
+				$bAddItem = $attributes['where']($k, $v);
+			}
+			else {
+				$bAddItem = true;
+			}
+
+			if($bAddItem) {
+				$sReturn .= '<'.$attributes['rowTag'].'>';
+
+				if(is_array($attributes['keys'])) {
+					foreach($attributes['keys'] as $kp) {
+						if(isset($v[$k][$kp])) {
+							$sReturn .=
+								'<'.$attributes['cellTag'].'>'
+								.$v[$k][$kp]
+								.'</'.$attributes['cellTag'].'>';
+						}
+					}
+				}
+				else {
+					$sReturn .= vsprintf($attributes['pattern'], $v);
+				}
+
+				$sReturn .= '</'.$attributes['rowTag'].'>';
+			}
+
+		}
+	}
+*/
+
+/**
+ * Format a tree sctrucure of array into html string
+ * @param (array) $tree = the tree array
+ * @param (array) $attributes = formating attributes
+ * @return (string)
+ */
+	public static function treeToString($tree, $attributes = array())
 	{
-		self::$arDebug['calls'][] = 'treeToString';
+
 		$attributes = self::applyDefault($attributes, array(
 			'itemStartTag' => '<li>',
 			'itemEndTag' => '</li>',
@@ -805,7 +1081,7 @@ class a
 		$sLastParentKey = '';
 		$sLastKey = '';
 
-		foreach ($array as $k => &$v) {
+		foreach ($tree as $k => &$v) {
 			if(!isset($v['type'])) {
 				$v['type'] = $attributes['defaultType'];
 			}
@@ -821,7 +1097,7 @@ class a
 				$sReturn .= $attributes['itemEndTag'];
 				while($v['parent'] !== $sLastParentKey) {
 					$sReturn .= $attributes['groupEndTag'].$attributes['itemEndTag'];
-					$sLastParentKey = $array[$sLastParentKey]['parent'];
+					$sLastParentKey = $tree[$sLastParentKey]['parent'];
 				}
 			}
 
@@ -834,26 +1110,38 @@ class a
 		$sReturn .= $attributes['itemEndTag'];
 		while($sLastParentKey !== '') {
 			$sReturn .= $attributes['groupEndTag'].$attributes['itemEndTag'];
-			$sLastParentKey = $array[$sLastParentKey]['parent'];
+			$sLastParentKey = $tree[$sLastParentKey]['parent'];
 		}
 		$sReturn .= $attributes['groupEndTag'];
 		return($sReturn);
 	}
 
 
-	public static function treeItemHasParent($array, $index, $parent) {
-		self::$arDebug['calls'][] = 'treeItemHasParent';
-		while(isset($array[$index]['parent']) && $array[$index]['parent'] !== '') {
-			if($array[$index]['parent'] === $parent) {
+/**
+ * Check if the item from the tree has a specific parent
+ * @param (array) $tree = the tree array
+ * @param (string) $index = the index of the tree item
+ * @param (string) $parent = the parrent index
+ * @return (boolean)
+ */
+ 	public static function treeItemHasParent($tree, $index, $parent) {
+
+		while(isset($tree[$index]['parent']) && $tree[$index]['parent'] !== '') {
+			if($tree[$index]['parent'] === $parent) {
 				return true;
 			}
-			$index = $array[$index]['parent'];
+			$index = $tree[$index]['parent'];
 		}
 		return false;
 	}
 
 
-	public static function treeReIndex(&$tree) {
+/**
+ * Reindex tree
+ * @param (array refference) $tree
+ */
+ 	public static function treeReIndex(&$tree) {
+
 		self::$arDebug['calls'][] = 'treeReIndex';
 		$newArray = array();
 		$i = 0;
@@ -875,8 +1163,9 @@ class a
 		$tree = $newArray;
 	}
 
+
 /**
- * Used to insert an item into an ORDONED tree, which have the structure based on parent attribute;
+ * Used to insert an item into an ORDERED tree, which have the structure based on parent attribute;
  * @param (Array) $tree = the tree;
  * @param (Array) $item = the element to be inserted;
  * @param (Array) $position = specify where to be positioned:
@@ -886,9 +1175,11 @@ class a
  * 		INSERT_AFTER = 2 = insert after the element;
  * 		INSERT_CHILD_FIRST = 3 = insert as first child;
  * 		INSERT_CHILD_LAST = 4 = insert as last child;
- *
+ * @return the new index;
  */
 	public static function treeInsertItem(&$tree, $item, $position) {
+
+		$index = 'new_'.a::guid();
 		self::$arDebug['calls'][] = 'treeInsertItem';
 		$newArray = array();
 
@@ -929,7 +1220,7 @@ class a
 			}
 		}
 
-		$newArray = array_merge_recursive($newArray, array('x' => $item));
+		$newArray = array_merge_recursive($newArray, array($index => $item));
 		if($position['pos'] === self::INSERT_BEFORE) {
 			 $newArray[$k] = $tree[$k];
 			unset($tree[$k]);
@@ -937,115 +1228,114 @@ class a
 		$newArray = array_merge_recursive($newArray, $tree);
 
 		$tree = $newArray;
-		//return($newArray);
+		return($index);
+	}
 
 
-//the logic for insert new element at the same level before the refference element:
-/*
-		if(isset($array[$position]['parent'])) {
-			$arItem['parent'] = $array[$position]['parent'];
+	public static function guid()
+	{
+
+	//generate a Globally Unique Identifier, valid v4 RFC 4122
+	//credits:The phunction PHP framework http://sourceforge.net/projects/phunction/
+		if (function_exists('com_create_guid') === true) {
+			return trim(com_create_guid(), '{}');
 		}
-		else {
-			$arItem['parent'] = '';
-		}
-		$newArray = array();
+		return sprintf('%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
+			// 32 bits for "time_low"
+			mt_rand(0, 0xffff), mt_rand(0, 0xffff),
 
-		foreach ($array as $k => &$v) {
-			if($k === $position) {
+			// 16 bits for "time_mid"
+			mt_rand(0, 0xffff),
+
+			// 16 bits for "time_hi_and_version",
+			// four most significant bits holds version number 4
+			mt_rand(0, 0x0fff) | 0x4000,
+
+			// 16 bits, 8 bits for "clk_seq_hi_res",
+			// 8 bits for "clk_seq_low",
+			// two most significant bits holds zero and one for variant DCE1.1
+			mt_rand(0, 0x3fff) | 0x8000,
+
+			// 48 bits for "node"
+			mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
+		);
+
+		//db version:
+		//return mysql_result(mysql_query('SELECT UUID()'), TRUE);
+	}
+
+
+
+	public static function log($message, $attributes = array())
+	{
+
+		$attributes = self::applyDefault($attributes, array(
+			'time' => true,
+			'priority' => LOG_DEBUG,
+			'system' => false,
+			'session' => true,
+			'request' => true
+		));
+
+		if(is_array($message)) {
+			if($attributes['session']) {
+				$message['session'] = $_SESSION;
+			}
+			if($attributes['request']) {
+				$message['request'] = $_REQUEST;
+			}
+			$message = print_r($message, true);
+		}
+
+		$messageHeader = '>>'.date("Y/m/d H:i:s.u").' - ';
+		$messageHeader .= @$_SERVER['REMOTE_ADDR'].'|'.@$_SERVER['HTTP_X_FORWARDED_FOR'].'|'.@$_SERVER['HTTP_CLIENT_IP'].' - ';
+		$messageHeader .= $_SERVER['HTTP_USER_AGENT']."\n";
+
+		$message = $messageHeader.$message."\n----------\n\n";
+
+		if($attributes['system'] === TRUE) {
+			syslog ($attributes['priority'] , $message);
+			return;
+		}
+
+		$sFilename = $_SERVER['DOCUMENT_ROOT']
+			.DIRECTORY_SEPARATOR.'includes'
+			.DIRECTORY_SEPARATOR.'agate'
+			.DIRECTORY_SEPARATOR.'logs'
+			.DIRECTORY_SEPARATOR;
+
+		switch($attributes['priority']) {
+			case LOG_EMERG:// 	system is unusable
+				$sFilename .= 'emerg_';
 				break;
-			}
-			else {
-				$newArray[$k] = $array[$k];
-				unset($array[$k]);
-			}
-		}
-		$newArray = array_merge_recursive($newArray, $arItem);
-		$newArray = array_merge_recursive($newArray, $array);
-
-		return($newArray);
-*/
-
-//the logic for insert new element at the same level after the refference element:
-/*
-		if(isset($array[$position]['parent'])) {
-			$arItem['parent'] = $array[$position]['parent'];
-		}
-		else {
-			$arItem['parent'] = '';
-		}
-
-		$newArray = array();
-
-		foreach ($array as $k => &$v) {
-			$newArray[$k] = $array[$k];
-			unset($array[$k]);
-			if($k === $position) {
+			case LOG_ALERT://	action must be taken immediately
+				$sFilename .= 'alert_';
 				break;
-			}
-		}
-		foreach ($array as $k => &$v) {
-			$newArray[$k] = $array[$k];
-			if(self::treeItemHasParent($newArray, $k, $position)) {
-				unset($array[$k]);
-			}
-			else {
-				unset($newArray[$k]);
+			case LOG_CRIT://	critical conditions
+				$sFilename .= 'crit_';
 				break;
-			}
-		}
-		$newArray = array_merge_recursive($newArray, $arItem);
-		$newArray = array_merge_recursive($newArray, $array);
-
-		return($newArray);
-
-*/
-//the logic for insert new element as first child:
-/*
- 		$arItem['parent'] = $position;
-		$newArray = array();
-
-		foreach ($array as $k => &$v) {
-			$newArray[$k] = $array[$k];
-			unset($array[$k]);
-			if($k === $position) {
+			case LOG_ERR://	error conditions
+				$sFilename .= 'err_';
 				break;
-			}
-		}
-		$newArray = array_merge_recursive($newArray, $arItem);
-		$newArray = array_merge_recursive($newArray, $array);
-
-		return($newArray);
-*/
-
-
-
-//the logic for insert new element as last child:
-/*
-		$arItem['parent'] = $position;
-		$newArray = array();
-
-		foreach ($array as $k => &$v) {
-			$newArray[$k] = $array[$k];
-			unset($array[$k]);
-			if($k === $position) {
+			case LOG_WARNING://	warning conditions
+				$sFilename .= 'warning_';
 				break;
-			}
-		}
-		foreach ($array as $k => &$v) {
-			$newArray[$k] = $array[$k];
-			if(self::treeItemHasParent($newArray, $k, $position)) {
-				unset($array[$k]);
-			}
-			else {
-				unset($newArray[$k]);
+			case LOG_NOTICE:// 	normal, but significant, condition
+				$sFilename .= 'notice_';
 				break;
-			}
+			case LOG_INFO://	informational message
+				$sFilename .= 'info_';
+				break;
+			case LOG_DEBUG://	debug-level message
+				$sFilename .= 'debug_';
+				break;
+			default:
+				$sFilename .= 'unknonw_';
+				break;
 		}
-		$newArray = array_merge_recursive($newArray, $arItem);
-		$newArray = array_merge_recursive($newArray, $array);
+		$sFilename .= date('Ymd').'.log';
 
-		return($newArray);
-*/
+		file_put_contents($sFilename, $message, FILE_APPEND | LOCK_EX);
 	}
 }
 ?>

@@ -1,6 +1,6 @@
 <?php
 /**
- *<b>db.mysql module for a php library</b>
+ *<b>db.mysqlnd module for a php library</b>
  *@author Vasile Giorgi
  *@license lgpl
  *@copyright 2011 (c) Vasile Giorgi
@@ -19,6 +19,9 @@ class aexDbMySql extends a
 
 
 	private static function dbConnect() {
+//debug{
+		self::addDebugCall('dbConnect');
+//}
 		if(!isset(self::$config['db'])
 		|| !isset(self::$config['db']['mysql'])
 		|| !isset(self::$config['db']['mysql']['server'])
@@ -49,6 +52,9 @@ class aexDbMySql extends a
 
 	public static function dbClose()
 	{
+//debug{
+		self::addDebugCall('dbClose');
+//}
 		if(self::$dbConnection === FALSE) {
 			self::$arDebug['error'][] = 'No MySQL connection to close!';
 			return FALSE;
@@ -63,6 +69,9 @@ class aexDbMySql extends a
 
 	public static function dbChange($sNewDatabaseName = FALSE)
 	{
+//debug{
+		self::addDebugCall('dbChange');
+//}
 		if($sNewDatabaseName === FALSE) {
 			$sNewDatabaseName = self::$config['db']['mysql']['database'];
 		}
@@ -75,10 +84,14 @@ class aexDbMySql extends a
 
 	public static function dbQuery($sQuery, $isMultiQuery = false)
 	{
+//debug{
+		self::addDebugCall('dbQuery');
+//}
 		if(self::$dbConnection === FALSE) {
 			self::dbConnect();
 		}
 		if(self::$dbConnection === FALSE) {
+			self::$arDebug['error'][] = 'SQL Error on function a::dbQuery: Can not connect to the dabase!';
 			return FALSE;
 		}
 //execute the query(silent)
@@ -92,7 +105,7 @@ class aexDbMySql extends a
 
 //handling errors:
 		if(!$result) {
-			self::$arDebug['error'][] = 'SQL Error:'.mysqli_error(self::$dbConnection).'<hr />on executing sql query:<pre>'.$sQuery.'</pre>';
+			a::$arDebug['error'][] = 'SQL Error on function a::dbQuery:'.mysqli_error(self::$dbConnection).'<hr />Error on executing sql query:<pre>'.$sQuery.'</pre>';
 			return FALSE;
 		}
 		else {
@@ -107,6 +120,7 @@ class aexDbMySql extends a
 	{
 //debug{
 		$time = microtime(true);
+		self::addDebugCall('dbExecute');
 //}
 //parse query
 		$result = self::dbQuery($sQuery);
@@ -178,6 +192,9 @@ class aexDbMySql extends a
 
 	public static function dbLookupTable($sSource, $sDomain, $sCriteria = '0=0', $iFetchType = MYSQLI_NUM)
 	{
+//debug{
+		self::addDebugCall('dbLookupTable');
+//}
 		$sQuery = 'SELECT '.$sSource.' FROM '.$sDomain.' WHERE '.$sCriteria;
 		self::$arDebug['info'][] = $sQuery;
 		return(self::dbExecute($sQuery, DB_RETURN_TABLE, $iFetchType));
@@ -186,6 +203,9 @@ class aexDbMySql extends a
 /*depricated probably:*/
 	public static function dbGetLastInsertId()
 	{
+//debug{
+		self::addDebugCall('dbGetLastInsertId');
+//}
 		return(v::dbExecute("SELECT LAST_INSERT_ID();"));
 	}
 
@@ -193,17 +213,18 @@ class aexDbMySql extends a
 	public static function dbLog($action, $note = '', $table = '', $fk = NULL)
 	{
 //debug{
-		self::addDebugCall('dbLog');
+//		self::addDebugCall('dbLog');
 //}
 
+		$arServer = array();
 		$sQuery = 'INSERT INTO `logs` ( `action`, `fk`, `ip`, `table`, `user`, `useragent`, `note`, `timestamp`)  VALUES (';
 		$sQuery .= self::dbFormat($action, 'str', 'unknown', 255).', ';
 		$sQuery .= self::dbFormat($fk, 'int').', ';
-		$sQuery .= self::dbFormat(@$_SERVER['REMOTE_ADDR'].'|'.@$_SERVER['HTTP_X_FORWARDED_FOR'].'|'.@$_SERVER['HTTP_CLIENT_IP'], 'str', '0.0.0.0', 127).', ';
+		$sQuery .= self::dbFormat(self::is($_SERVER['REMOTE_ADDR']).'|'.self::is($_SERVER['HTTP_X_FORWARDED_FOR']).'|'.self::is($_SERVER['HTTP_CLIENT_IP']), 'str', '0.0.0.0', 127).', ';
 		$sQuery .= self::dbFormat($table, 'str', '', 25).', ';
-		$sQuery .= self::dbFormat(@$_SESSION['agate']['user']['id'], 'int');
+		$sQuery .= self::dbFormat(self::is($_SESSION['agate']['user']['id']), 'int').', ';
 		$sQuery .= self::dbFormat($_SERVER['HTTP_USER_AGENT'], 'str', 'unknown', 255).', ';
-		$sQuery .= self::dbFormat($note, 'str').', ';
+		$sQuery .= self::dbFormat($note).', ';
 		$sQuery .= 'NOW())';
 
 		return(self::dbExecute($sQuery));
@@ -247,6 +268,7 @@ class aexDbMySql extends a
 	public static function dbAtos($sQuery, $sPattern, $aConfig = array())
 	{
 //debug{
+		self::addDebugCall('dbAtos');
 		$time = microtime(true);
 //}
 		self::$arDebug['atos'][] = $aConfig;
@@ -313,8 +335,12 @@ class aexDbMySql extends a
 	}
 
 
-	public static function dbFormat($variable, $sType, $default = 'NULL', $format = false)
+	public static function dbFormat($variable, $sType = 'string', $default = 'NULL', $format = false)
 	{
+//debug{
+		self::addDebugCall('dbFormat');
+//}
+
 		if(self::$dbConnection === FALSE) {
 			self::dbConnect();
 		}
@@ -337,7 +363,12 @@ class aexDbMySql extends a
 
 			case 'integer':
 			case 'int':
-				$sResult = (int) $variable;
+				if (is_numeric($variable)) {
+					$sResult = (int) $variable;
+				}
+				else {
+					$sResult = $default;
+				}
 				//add a test if the result is not integer return $format
 				break;
 

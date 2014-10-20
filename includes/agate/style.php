@@ -17,8 +17,8 @@ echo('@CHARSET "UTF-8";'."\n");
 
 
 function compress($buffer) {
-//	$buffer = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $buffer); //remove comments
-//	$buffer = str_replace(array("\r\n", "\r", "\n", "\t", '  ', '    ', '    '), '', $buffer); //remove tabs, spaces, newlines, etc.
+	$buffer = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $buffer); //remove comments
+	$buffer = str_replace(array("\r\n", "\r", "\n", "\t", '  ', '    ', '    '), '', $buffer); //remove tabs, spaces, newlines, etc.
 	return $buffer;
 }
 

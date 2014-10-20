@@ -12,4 +12,4 @@ You do not have to do anything special to choose one license or the other and yo
 
 Credits:
 jquery - jQuery is a fast and concise JavaScript Library that simplifies HTML document traversing, event handling, animating, and Ajax interactions for rapid web development. (http://jquery.com/)
-
+Bootstrap - Copyright 2013 Twitter, Inc.
